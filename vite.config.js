@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import fs from 'fs';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 // ═══════════════════════════════════════════════════════════════
 //  TRACA SCENARIO WRITER — Vite Plugin
@@ -159,15 +160,12 @@ function safeEntry(label, filePath) {
 }
 
 export default defineConfig(({ command }) => {
-    // basicSsl uniquement en dev local (HTTPS local) — pas sur Vercel
+    // Liste des plugins de base
     const plugins = [scenarioWriterPlugin(), exportLevelPlugin(), audioListerPlugin()];
 
+    // Ajouter basicSsl uniquement en dev local
     if (command === 'serve') {
-        try {
-            // Dynamic require compatible ESM
-            const { createRequire } = await import('module').catch(() => ({ createRequire: null }));
-            // Fallback: just skip SSL in serve if can't load
-        } catch(e) {}
+        plugins.push(basicSsl());
     }
 
     return {
