@@ -4,3 +4,4 @@ dist/
 .env*.local
 *.local
 exports/
+experiences/casbah_backup/

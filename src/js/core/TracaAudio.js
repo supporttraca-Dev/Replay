@@ -133,11 +133,6 @@ export class TracaAudio {
         }
     }
 
-    /**
-     * Retourne l'amplitude RMS (Root Mean Square) du canal narration, entre 0 et 255.
-     * Méthode principale pour les sous-titres karaokés dans main.js.
-     * SAFE : peut être appelée à chaque frame d'animation sans risque.
-     */
     getNarrationAmplitude() {
         this._initAnalyser();
         if (!this.analyser || !this._analyserDataArray) return 0;
@@ -153,8 +148,43 @@ export class TracaAudio {
             const val = (this._analyserDataArray[i] - 128) / 128; // normalisation -1 à 1
             sum += val * val;
         }
-        // Amplitude RMS rescalée 0→255 (identique à l'ancien code local dans main.js)
         return Math.sqrt(sum / this._analyserDataArray.length) * 255;
+    }
+
+    /**
+     * Précharge les fichiers audio critiques en mémoire vive (RAM) via Blob Object URLs.
+     * Ceci élimine totalement la latence réseau lors de la lecture sur iOS/Safari.
+     */
+    async preloadCoreAudio() {
+        const coreAudioPaths = [
+            '/assets/levels/level_01_casbah/global/music/casbah_day_music_01.mp3',
+            '/assets/levels/level_01_casbah/global/music/casbah_night_music_01.mp3',
+            '/assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/ambience/01_ambience_day.mp3',
+            '/assets/levels/level_01_casbah/scenes/02_rez_de_chaussee_nuit/elements/ambience/02_ambience_night.mp3',
+            '/assets/levels/level_01_casbah/global/sfx/time_warp.mp3',
+            '/assets/levels/level_01_casbah/global/sfx/sfx_magical_focus.mp3'
+        ];
+
+        console.info('[TracaAudio] Preloading core audio into RAM...');
+        const promises = coreAudioPaths.map(async path => {
+            if (this.sfxCache[path]) return; // Déjà chargé
+            try {
+                const response = await fetch(path);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const blob = await response.blob();
+                this.sfxCache[path] = URL.createObjectURL(blob);
+            } catch (err) {
+                console.warn('[TracaAudio] Échec du preload en RAM pour', path, err);
+            }
+        });
+
+        await Promise.all(promises);
+        console.info('[TracaAudio] Core audio preloaded in RAM.');
+    }
+
+    _getRamPath(resolvedPath) {
+        // Retourne le Blob en RAM s'il existe, sinon le chemin standard
+        return this.sfxCache[resolvedPath] || resolvedPath;
     }
 
     /**
@@ -186,12 +216,11 @@ export class TracaAudio {
      * Otherwise, it falls back to the old basePath + channel logic.
      */
     _resolvePath(channelName, filename) {
-        // Chemin absolu fourni explicitement → on le prend tel quel
         if (filename.startsWith('/') || filename.startsWith('.')) {
-            return filename;
+            return this._getRamPath(filename);
         }
         const base = this.basePaths[channelName] || this.basePaths.sfx;
-        return base + filename;
+        return this._getRamPath(base + filename);
     }
 
     /**
@@ -208,7 +237,6 @@ export class TracaAudio {
 
     /**
      * Joue une Musique (remplace la précédente avec un crossfade doux)
-     * Gère automatiquement le ducking si une narration joue déjà.
      */
     playMusic(filename, fadeDuration = 2) {
         if (!filename) return this.stopMusic();
@@ -221,7 +249,7 @@ export class TracaAudio {
     }
 
     /**
-     * Joue une Narration. Déclenche le ducking de la musique et ambiance si désiré.
+     * Joue une Narration.
      */
     playNarration(filename) {
         if (!filename) return this.stopNarration();
@@ -235,12 +263,11 @@ export class TracaAudio {
             .then(() => { Analytics.trackAudioPlayback('narration', 'play', filename); })
             .catch(e => console.warn('Narration bloquée par le nav:', e));
 
-        // Ducking immédiat (rapide : 1s)
         this._duckMusic();
     }
 
     /**
-     * Joue un Effet Sonore court en "Tir/Oublie" (Fire and forget).
+     * Joue un Effet Sonore
      */
     playSFX(filename) {
         if (this.isMuted) return;
@@ -254,7 +281,7 @@ export class TracaAudio {
     }
 
     /**
-     * Joue un SFX en boucle (ex: son de concentration/focus).
+     * Joue un SFX en boucle
      */
     playLoopSFX(filename, volume = 0.5) {
         if (this.isMuted) return;

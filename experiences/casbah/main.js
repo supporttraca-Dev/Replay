@@ -4,6 +4,8 @@ import { CSS2DRenderer, CSS2DObject } from 'https://unpkg.com/three@0.160.0/exam
 import { tracaAudio } from '../../src/js/core/TracaAudio.js';
 import { Analytics } from '../../src/js/core/Analytics.js';
 import { CASBAH_SCENARIO } from '../../src/js/levels/Level_01_Casbah.js';
+import { swManager } from '../../src/js/core/SWManager.js';
+import { localStore } from '../../src/js/core/db/localStore.js';
 
 import {
     InventoryModule,
@@ -551,53 +553,46 @@ class CasbahExperience {
     }
 
     async _loadEnvironment() {
-        this.preloadedAudios = {};
         this._setProg(0);
 
-        // ── Fake progress animation (immediately visible on mobile) ──
-        let fakeVal = 0;
-        const fakeTimer = setInterval(() => {
-            fakeVal += (88 - fakeVal) * 0.04;
-            this._setProg(Math.round(fakeVal));
-        }, 150);
-
-        // ── Safety: never block more than 25 s total ──
-        const globalTimeout = new Promise(resolve =>
+        // -- Wait for Service Worker Preload --
+        await new Promise((resolve) => {
+            const checkProgress = (state) => {
+                if (state.total > 0) {
+                    const percent = (state.loaded / state.total) * 100;
+                    this._setProg(Math.round(percent));
+                }
+                
+                if (state.isComplete) {
+                    swManager.removeListener(checkProgress);
+                    this._setProg(100);
+                    resolve();
+                }
+            };
+            
+            swManager.addListener(checkProgress);
+            
+            // Fallback s'il y a un souci avec le SW
             setTimeout(() => {
-                console.warn('[Traca] Safety timeout — forcing loader completion.');
-                resolve({ forced: true });
-            }, 25000)
-        );
+                console.warn('[Traca] SW Preload Timeout — forcing progression.');
+                swManager.removeListener(checkProgress);
+                this._setProg(100);
+                resolve();
+            }, 10000); // Temps max toléré si offline
+        });
 
-        // ── Load textures via THREE.TextureLoader (works on mobile HTTPS / self-signed SSL) ──
+        // ── Load textures via THREE.TextureLoader ──
         const loadTex = (url) => new Promise((resolve) => {
             const loader = new THREE.TextureLoader();
-            loader.load(
-                url,
-                (tex) => resolve(tex),
-                undefined,
-                (err) => {
-                    console.error('[Traca] Texture load error:', url, err);
-                    // Return a blank texture so loading never fully fails
-                    resolve(new THREE.Texture());
-                }
-            );
+            loader.load(url, resolve, undefined, () => resolve(new THREE.Texture()));
         });
 
         try {
-            const [texDay, texNight] = await Promise.race([
-                Promise.all([
-                    loadTex('../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/background/01_bg.png?v=2.0'),
-                    loadTex('../../assets/levels/level_01_casbah/scenes/02_rez_de_chaussee_nuit/background/02_bg.png?v=2.0')
-                ]),
-                globalTimeout.then(() => [
-                    new THREE.Texture(),
-                    new THREE.Texture()
-                ])
+            // Puisque le SW a tout préchargé, ceci est quasi instantané depuis le cache
+            const [texDay, texNight] = await Promise.all([
+                loadTex('../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/background/01_bg.png'),
+                loadTex('../../assets/levels/level_01_casbah/scenes/02_rez_de_chaussee_nuit/background/02_bg.png')
             ]);
-
-            clearInterval(fakeTimer);
-            this._setProg(100);
 
             texDay.colorSpace   = THREE.SRGBColorSpace;
             texNight.colorSpace = THREE.SRGBColorSpace;
@@ -607,46 +602,28 @@ class CasbahExperience {
             const geo = new THREE.SphereGeometry(500, 60, 40);
             geo.scale(-1, 1, 1);
 
-            // Multivers Sphere 1 : JOUR
             const matDay = new THREE.MeshBasicMaterial({ map: texDay, side: THREE.FrontSide });
             this.sphereDay = new THREE.Mesh(geo, matDay);
             this.scene.add(this.sphereDay);
 
-            // Multivers Sphere 2 : NUIT (Invisible au début)
             const matNight = new THREE.MeshBasicMaterial({ map: texNight, side: THREE.FrontSide, transparent: true, opacity: 0 });
             this.sphereNight = new THREE.Mesh(geo, matNight);
             this.scene.add(this.sphereNight);
 
-            // Link day/night spheres to local modules
             this.timeTravel.sphereDay = this.sphereDay;
             this.timeTravel.sphereNight = this.sphereNight;
             this.navigator.sphereDay = this.sphereDay;
             this.navigator.sphereNight = this.sphereNight;
 
-            // ── Non-blocking audio preload (fire-and-forget) ──
-            const audioPaths = [];
-            const pois = CASBAH_SCENARIO.pois || (CASBAH_SCENARIO.nodes && CASBAH_SCENARIO.nodes.patio ? CASBAH_SCENARIO.nodes.patio.pois : []);
-            pois.forEach(poi => {
-                if (poi.audio && !audioPaths.includes(poi.audio)) audioPaths.push(poi.audio);
-                if (poi.replicas) poi.replicas.forEach(rep => {
-                    if (rep.audio && !audioPaths.includes(rep.audio)) audioPaths.push(rep.audio);
-                });
-            });
-            audioPaths.forEach(path => {
-                const finalPath = path.startsWith('/') || path.startsWith('.') ? path : '/assets/audio/' + path;
-                fetch(finalPath).then(r => r.ok ? r.blob() : null).then(blob => {
-                    if (blob) this.preloadedAudios[path] = URL.createObjectURL(blob);
-                }).catch(() => { /* ignore audio preload errors */ });
-            });
+            // Décodage natif WebAudio pour les musiques d'ambiance (0 latence)
+            await tracaAudio.preloadCoreAudio();
 
-            setTimeout(() => this._onLoadComplete(), 800);
+            setTimeout(() => this._onLoadComplete(), 400);
 
         } catch (err) {
-            clearInterval(fakeTimer);
             console.error('[Traca] Critical load error:', err);
-            // Still try to boot with blank textures
             this._setProg(100);
-            setTimeout(() => this._onLoadComplete(), 800);
+            setTimeout(() => this._onLoadComplete(), 400);
         }
     }
 
@@ -1511,8 +1488,31 @@ class CasbahExperience {
         this.inventory.updateUI();
     }
 
+    async _saveRealTime() {
+        try {
+            // Sauvegarde de secours synchrone
+            localStorage.setItem('traca_found_artifacts', JSON.stringify(Array.from(this.state.foundArtifacts)));
+            
+            // Sauvegarde robuste via IndexedDB
+            const session = await localStore.getSession();
+            if (session) {
+                if (!session.progression.foundArtifacts) session.progression.foundArtifacts = [];
+                session.progression.foundArtifacts = Array.from(this.state.foundArtifacts);
+                
+                if (!session.progression.unlockedNodes) session.progression.unlockedNodes = [];
+                if (!session.progression.unlockedNodes.includes(this.state.currentNodeId)) {
+                    session.progression.unlockedNodes.push(this.state.currentNodeId);
+                }
+                await localStore.saveSession(session);
+            }
+        } catch(e) {
+            console.warn('[DB Local] Échec sauvegarde temps réel', e);
+        }
+    }
+
     _onArtifactFound(artId) {
         this._updateQuestUI();
+        this._saveRealTime(); // Phase 5 : Sauvegarde Event-Driven
 
         // Trouver le Journal valide automatiquement le tutoriel Eagle Vision
         if (artId === 'journal' && !this.state.onboarding.eagleTutorialCompleted) {
@@ -1522,6 +1522,7 @@ class CasbahExperience {
 
     _updateQuestUI() {
         // Désactivé pour éviter de spoil le joueur
+        this._saveRealTime(); // Phase 5 : Sauvegarde Event-Driven
     }
 
     _showLockedDoor() {

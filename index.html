@@ -136,6 +136,12 @@
     <!-- App Logic -->
     <script type="module">
         import { syncManager } from './src/js/core/db/syncManager.js';
+        import { swManager } from './src/js/core/SWManager.js';
+
+        // Lancement immédiat du pré-chargement global en arrière-plan
+        swManager.register().then(() => {
+            swManager.startPreload();
+        });
 
         window.app = {
             selectedCharacter: 'passerby',

@@ -217,10 +217,6 @@ export class EagleVisionModule {
 
         // Sauvegarder l'artéfact
         this.foundArtifacts.add(artifact.id);
-        try {
-            localStorage.setItem('traca_found_artifacts',
-                JSON.stringify(Array.from(this.foundArtifacts)));
-        } catch (_) {}
 
         // Mettre à jour l'UI inventaire
         this.inventory?.updateUI();
