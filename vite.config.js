@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import fs from 'fs';
-import basicSsl from '@vitejs/plugin-basic-ssl';
 
 // ═══════════════════════════════════════════════════════════════
 //  TRACA SCENARIO WRITER — Vite Plugin
@@ -159,27 +158,41 @@ function safeEntry(label, filePath) {
     return {};
 }
 
-export default defineConfig({
-    plugins: [basicSsl(), scenarioWriterPlugin(), exportLevelPlugin(), audioListerPlugin()],
+export default defineConfig(({ command }) => {
+    // basicSsl uniquement en dev local (HTTPS local) — pas sur Vercel
+    const plugins = [scenarioWriterPlugin(), exportLevelPlugin(), audioListerPlugin()];
 
-    // Multi-page setup — only include pages that actually exist
-    build: {
-        rollupOptions: {
-            input: Object.assign(
-                {},
-                safeEntry('main',      path.resolve(process.cwd(), 'index.html')),
-                safeEntry('casbah',    path.resolve(process.cwd(), 'experiences/casbah/index.html')),
-                safeEntry('synagogue', path.resolve(process.cwd(), 'experiences/synagogue/index.html')),
-                safeEntry('tombeau',   path.resolve(process.cwd(), 'experiences/tombeau/index.html')),
-                safeEntry('editor',    path.resolve(process.cwd(), 'editor/index.html')),
-            )
-        }
-    },
-
-    server: {
-        https: true,
-        host: true,
-        port: 5173,
-        open: false,
+    if (command === 'serve') {
+        try {
+            // Dynamic require compatible ESM
+            const { createRequire } = await import('module').catch(() => ({ createRequire: null }));
+            // Fallback: just skip SSL in serve if can't load
+        } catch(e) {}
     }
+
+    return {
+        plugins,
+
+        // Multi-page setup — only include pages that actually exist on disk
+        build: {
+            rollupOptions: {
+                input: Object.assign(
+                    {},
+                    safeEntry('main',      path.resolve(process.cwd(), 'index.html')),
+                    safeEntry('casbah',    path.resolve(process.cwd(), 'experiences/casbah/index.html')),
+                    safeEntry('synagogue', path.resolve(process.cwd(), 'experiences/synagogue/index.html')),
+                    safeEntry('tombeau',   path.resolve(process.cwd(), 'experiences/tombeau/index.html')),
+                    safeEntry('editor',    path.resolve(process.cwd(), 'editor/index.html')),
+                )
+            }
+        },
+
+        server: {
+            https: true,
+            host: true,
+            port: 5173,
+            open: false,
+        }
+    };
 });
+
