@@ -1,0 +1,796 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNXLY71ZFL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LNXLY71ZFL');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>La Casbah d'Alger — Visite 360°</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/webp" href="../../assets/images/logo_traca.webp">
+
+    <!-- Préchargement des ressources lourdes (Optimisation First Load) -->
+    <link rel="preload" href="../../assets/images/map.png" as="image">
+    <link rel="preload" href="../../assets/video/bg_menu_mobile.mp4" as="video" media="(max-width: 768px)">
+    <link rel="preload" href="../../assets/video/bg_menu.mp4" as="video" media="(min-width: 769px)">
+
+    <link rel="stylesheet" href="../../src/css/base.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+<!-- ═══ LOADER (Design Dynamique Type Casbah) ═══ -->
+<div id="c-loader">
+    <div class="c-loader-inner">
+        <!-- Logo TRACA — Agrandi -->
+        <img src="../../assets/images/logo_traca.webp"
+             alt="Logo TRACA"
+             class="c-loader-logo" style="width:130px; height:130px; margin-bottom:2rem; object-fit:contain; opacity:0.8; filter:drop-shadow(0 0 20px rgba(231,186,128,0.4)); animation: pulse-logo 2.5s ease-in-out infinite;">
+
+        <!-- Barre de progression Casbah-style -->
+        <p class="c-loader-label" id="c-loader-label" style="font-family:'Cinzel', serif; font-size:0.8rem; letter-spacing:0.15em; color:#99784e; margin-bottom:1.5rem; text-transform:uppercase;">Chargement de l'environnement…</p>
+        <div class="c-loader-bar-wrap" style="width:100%; height:2px; background:rgba(231,186,128,0.1); margin-bottom:0.5rem; overflow:hidden;">
+            <div id="c-loader-bar" style="width:0%; height:100%; background:linear-gradient(90deg, transparent, #e7ba80, transparent); background-size:200% 100%; transition:width 0.2s ease; animation:shimmer 1.5s infinite;"></div>
+        </div>
+        <span id="c-loader-pct" style="font-family:monospace; font-size:0.75rem; color:rgba(255,255,255,0.5);">0%</span>
+
+        <!-- Astuce casque -->
+        <p class="intro-hint" style="margin-top: 1.5rem;">
+            <span class="headphones-icon">🎧</span>
+            Mettez vos écouteurs pour une expérience optimale
+        </p>
+
+        <!-- Bouton Entrer (affiché par JS quand 100%) -->
+        <button id="c-loader-enter" style="display:inline-block; opacity:0.4; pointer-events:none; filter:grayscale(100%); margin-top:1.5rem; border:1px solid rgba(231,186,128,0.4); background:rgba(10,10,10,0.8); color:#e7ba80; padding:10px 24px; font-family:'Cinzel',serif; cursor:not-allowed;">
+            ✦ Entrer dans l'expérience
+        </button>
+    </div>
+</div>
+
+
+
+<!-- ═══ MENU PRINCIPAL ═══════════════════════════════════════ -->
+<div id="c-menu" hidden>
+    <video id="menu-bg-video" class="menu-video-bg" preload="auto" autoplay loop muted playsinline></video>
+    <script>
+        // Détection de l'écran avant chargement pour charger le bon asset vidéo (économie de données)
+        const menuVid = document.getElementById('menu-bg-video');
+        if (window.innerWidth <= 768 && window.innerHeight > window.innerWidth) {
+            menuVid.src = "../../assets/video/bg_menu_mobile.mp4";
+        } else {
+            menuVid.src = "../../assets/video/bg_menu.mp4";
+        }
+    </script>
+    <!-- Overlay de transition fondu noir -->
+    <div id="t-overlay"></div>
+
+    <!-- ════════════════════════════════════════════════════
+         ÉCRAN 1 — MENU PRINCIPAL
+    ════════════════════════════════════════════════════ -->
+    <div id="s-menu" class="screen active">
+        <div class="s-bg"></div>
+        <div class="s-body">
+            <!-- ⚙ Paramètres haut-droite -->
+            <button id="btn-settings" aria-label="Options" onclick="goScreen('s-options','s-menu')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06-.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+            </button>
+
+            <!-- Logo centré -->
+            <!-- Centre complétement vide pour laisser la vidéo s'exprimer -->
+            <div class="menu-center">
+            </div>
+
+            <!-- DÉBUT et Titre en bas -->
+            <div class="menu-bottom" style="margin-bottom: 60px; gap: 20px;">
+                <!-- Titre abaissé et réduit -->
+                <div style="display:flex; flex-direction:column; align-items:center; width:100%; padding:0 20px;">
+                    <h1 class="menu-title-responsive">Visite Virtuelle — Patrimoine Historique</h1>
+                    <div class="orn" style="margin-top:0.4rem; max-width: 150px;">
+                        <div class="orn-line"></div><span class="orn-gem" style="font-size:0.4rem;">✦</span><div class="orn-line"></div>
+                    </div>
+                </div>
+                
+                <button id="btn-start" class="btn-main">DÉBUT</button>
+            </div>
+            
+            <!-- Bouton caché Mode Éditeur (requis par main.js) -->
+            <button id="btn-editor" style="display:none;"></button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════
+         ÉCRAN 2 — OPTIONS / DÉCORS
+    ════════════════════════════════════════════════════ -->
+    <div id="s-options" class="screen">
+        <div class="s-bg"></div>
+        <div class="s-body">
+            <!-- ← Retour -->
+            <button class="btn-back" aria-label="Retour" onclick="goScreen('s-menu','s-options')">←</button>
+
+            <!-- Titre -->
+            <div class="page-header">
+                <h1 class="page-title">Décors</h1>
+                <div class="orn" style="max-width:280px;">
+                    <div class="orn-line" style="background:linear-gradient(to right,transparent,rgba(60,35,12,0.4),transparent);"></div>
+                    <span class="orn-gem" style="color:rgba(60,35,12,0.5);">✦</span>
+                    <div class="orn-line" style="background:linear-gradient(to right,transparent,rgba(60,35,12,0.4),transparent);"></div>
+                </div>
+            </div>
+
+            <!-- Section LANGUE & SON -->
+            <p class="section-label">Langue &amp; Son</p>
+
+            <!-- Langue -->
+            <div class="opt-row">
+                <span class="opt-row-label">Langue</span>
+                <div class="opt-choices">
+                    <button class="c-btn on" data-g="lang" data-v="ar" onclick="pickOpt(this)">العربية</button>
+                    <button class="c-btn" data-g="lang" data-v="fr" onclick="pickOpt(this)">Français</button>
+                    <button class="c-btn" data-g="lang" data-v="en" onclick="pickOpt(this)">English</button>
+                </div>
+            </div>
+
+            <!-- Son -->
+            <div class="opt-row">
+                <span class="opt-row-label">Son</span>
+                <div class="opt-choices">
+                    <button class="c-btn" data-g="sound" data-v="off" onclick="pickOpt(this)">Off</button>
+                    <button class="c-btn on" data-g="sound" data-v="on" onclick="pickOpt(this)">On</button>
+                </div>
+            </div>
+
+            <!-- Boutons de son legacy cachés (compatibilité _bindEvents) -->
+            <input type="range" id="vol-music"    min="0" max="1" step="0.01" value="0.26" style="display:none;">
+            <input type="range" id="vol-voice"    min="0" max="1" step="0.01" value="1.0"  style="display:none;">
+            <input type="range" id="vol-ambience" min="0" max="1" step="0.01" value="0.52" style="display:none;">
+
+            <!-- ═══ MÉLANGEUR AUDIO VISIBLE ═══ -->
+            <p class="section-label" style="margin-top:20px;">Mélangeur Audio</p>
+            <div class="audio-mixer">
+
+                <!-- Musique -->
+                <div class="mixer-row">
+                    <span class="mixer-label">🎵 Musique</span>
+                    <div class="mixer-track">
+                        <input type="range" id="mix-music" class="mixer-slider" min="0" max="1" step="0.01" value="0.26"
+                            oninput="onMixerChange('music', this.value, 'lbl-mix-music')">
+                        <span class="mixer-val" id="lbl-mix-music">26%</span>
+                    </div>
+                </div>
+
+                <!-- Ambiances -->
+                <div class="mixer-row">
+                    <span class="mixer-label">🌿 Ambiances</span>
+                    <div class="mixer-track">
+                        <input type="range" id="mix-ambience" class="mixer-slider" min="0" max="1" step="0.01" value="0.52"
+                            oninput="onMixerChange('ambience', this.value, 'lbl-mix-ambience')">
+                        <span class="mixer-val" id="lbl-mix-ambience">52%</span>
+                    </div>
+                </div>
+
+                <!-- Voix / Narration -->
+                <div class="mixer-row">
+                    <span class="mixer-label">🗣 Voix</span>
+                    <div class="mixer-track">
+                        <input type="range" id="mix-narration" class="mixer-slider" min="0" max="1" step="0.01" value="1.0"
+                            oninput="onMixerChange('narration', this.value, 'lbl-mix-narration')">
+                        <span class="mixer-val" id="lbl-mix-narration">100%</span>
+                    </div>
+                </div>
+
+                <!-- SFX -->
+                <div class="mixer-row">
+                    <span class="mixer-label">✨ SFX</span>
+                    <div class="mixer-track">
+                        <input type="range" id="mix-sfx" class="mixer-slider" min="0" max="1" step="0.01" value="0.7"
+                            oninput="onMixerChange('sfx', this.value, 'lbl-mix-sfx')">
+                        <span class="mixer-val" id="lbl-mix-sfx">70%</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Section Éditeur (développement) - Caché visuellement mais logiciellement présent -->
+            <div class="opt-row" style="display:none !important;">
+                <span class="opt-row-label">Mode Éditeur</span>
+                <div class="opt-choices">
+                    <button class="c-btn" id="btn-toggle-editor" onclick="window.activateEditorMode()">
+                        🛠 Activer l'éditeur
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bouton CRÉDITS en bas -->
+            <div class="opts-bottom">
+                <button class="btn-main" style="padding:15px 56px;" onclick="goScreen('s-credits','s-options')">CRÉDITS</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════════════════
+         ÉCRAN 3 — CRÉDITS
+    ════════════════════════════════════════════════════ -->
+    <div id="s-credits" class="screen">
+        <div class="s-bg"></div>
+        <div class="s-body">
+            <!-- ← Retour -->
+            <button class="btn-back" aria-label="Retour" onclick="goScreen('s-options','s-credits')">←</button>
+
+            <!-- Titre + crédits centrés -->
+            <div class="credits-container">
+                <h1 class="page-title" style="color:#e8d9b8; margin-bottom:10px;">Crédits</h1>
+                <div class="orn" style="margin-bottom:32px;">
+                    <div class="orn-line"></div><span class="orn-gem">✦</span><div class="orn-line"></div>
+                </div>
+
+                <!-- Personne 1 -->
+                <div class="cr-person">
+                    <p class="cr-name">Chehinez Fetteaka</p>
+                    <p class="cr-roles">
+                        Fondatrice &nbsp;·&nbsp; Écriture &nbsp;·&nbsp; Recherche scientifique<br>
+                        Narration textuelle &nbsp;·&nbsp; Direction artistique
+                    </p>
+                </div>
+
+                <hr class="cr-sep">
+
+                <!-- Personne 2 -->
+                <div class="cr-person">
+                    <p class="cr-name">Amir Dekik</p>
+                    <p class="cr-roles">
+                        Développement technique &nbsp;·&nbsp; Direction artistique (Visuel)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Préchargement de l'audio UI pour éviter la latence
+const uiSfxAudio = new Audio('/assets/audio/ui/click.mp3');
+uiSfxAudio.volume = 0.6;
+uiSfxAudio.load();
+
+// ── Transition fondu-noir entre 2 écrans ──
+window.goScreen = function(to, from) {
+    const ov = document.getElementById('t-overlay');
+    if (!ov) return;
+    
+    // Joue le son sans latence via cloneNode
+    const clickSfx = uiSfxAudio.cloneNode();
+    clickSfx.volume = 0.6;
+    clickSfx.play().catch(() => {});
+    
+    ov.classList.add('on');
+    setTimeout(() => {
+        document.getElementById(from).classList.remove('active');
+        document.getElementById(to).classList.add('active');
+        setTimeout(() => ov.classList.remove('on'), 200);
+    }, 320);
+};
+
+// ── Toggles (Langue / Son) ──
+window.pickOpt = function(btn) {
+    const clickSfx = uiSfxAudio.cloneNode();
+    clickSfx.volume = 0.6;
+    clickSfx.play().catch(() => {});
+
+    const g = btn.dataset.g;
+    document.querySelectorAll(`.c-btn[data-g="${g}"]`).forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    localStorage.setItem('traca_' + g, btn.dataset.v);
+    
+    // Si on désactive le son global
+    if (g === 'sound' && window.tracaAudio) {
+        if (btn.dataset.v === 'off') {
+            document.getElementById('vol-music').value = 0;
+            document.getElementById('vol-ambience').value = 0;
+            window.tracaAudio.setVolume('music', 0);
+            window.tracaAudio.setVolume('ambience', 0);
+        } else {
+            document.getElementById('vol-music').value = 0.5;
+            document.getElementById('vol-ambience').value = 0.4;
+            window.tracaAudio.setVolume('music', 0.5);
+            window.tracaAudio.setVolume('ambience', 0.4);
+        }
+    }
+};
+
+// Restaurer préférences UI
+setTimeout(() => {
+    ['lang','sound'].forEach(g => {
+        const v = localStorage.getItem('traca_' + g);
+        if (v) {
+            document.querySelectorAll(`.c-btn[data-g="${g}"]`).forEach(b => b.classList.remove('on'));
+            const t = document.querySelector(`.c-btn[data-g="${g}"][data-v="${v}"]`);
+            if (t) t.classList.add('on');
+        }
+    });
+    // Restaurer les niveaux du mélangeur
+    const mixMap = { music: 'mix-music', ambience: 'mix-ambience', narration: 'mix-narration', sfx: 'mix-sfx' };
+    Object.entries(mixMap).forEach(([ch, id]) => {
+        const stored = localStorage.getItem(`traca_vol_${ch}`);
+        if (stored !== null) {
+            const el = document.getElementById(id);
+            const lbl = document.getElementById(`lbl-${id}`);
+            if (el) el.value = stored;
+            if (lbl) lbl.textContent = Math.round(parseFloat(stored) * 100) + '%';
+        }
+    });
+}, 500);
+
+// ── Mélangeur Audio ──
+window.onMixerChange = function(channel, value, lblId) {
+    const pct = Math.round(parseFloat(value) * 100) + '%';
+    const lbl = document.getElementById(lblId);
+    if (lbl) lbl.textContent = pct;
+    if (window.tracaAudio) window.tracaAudio.setVolume(channel, parseFloat(value));
+    // setVolume() persiste déjà dans localStorage (voir TracaAudio.js)
+};
+
+
+// ── Activer le mode éditeur (depuis Options) ──
+// SNAPSHOT v1.0 — Ancienne logique de vérification :
+// if (!confirm('Activer le mode Éditeur ?\n(Réservé au développement — désactivé en production)')) return;
+//
+// NOUVELLE LOGIQUE : Verrouillage par mot de passe.
+window.activateEditorMode = function() {
+    const pwd = prompt('🔐 Mode Éditeur\n\nCe mode est réservé au développement.\nEntrez le mot de passe pour continuer :');
+    if (pwd === null) return; // Annulation par l'utilisateur
+    if (pwd !== 'tracachahinezamir2026hob') {
+        alert('❌ Mot de passe incorrect. Accès refusé.');
+        return;
+    }
+    // Accès autorisé
+    if (window.__casbahApp) {
+        window.__casbahApp._setMode('EDIT');
+        const menu = document.getElementById('c-menu');
+        if (menu) menu.style.display = 'none';
+    }
+};
+
+// ── Retour à la carte depuis le HUD VIEW ──
+window.hudBackToMap = function() {
+    if (window.__casbahApp && window.__casbahApp.mapIntro) {
+        const app = window.__casbahApp;
+        // Arrêter l'auto-rotation
+        app.controls.autoRotate = false;
+        // Cacher le HUD
+        app.els.hud.style.display = 'none';
+        // Arrêter les sons in-game
+        import('../../src/js/core/TracaAudio.js').then(({ tracaAudio }) => {
+            tracaAudio.stopAll();
+        }).catch(() => {});
+        // Réinitialiser l'état et afficher la map
+        app.state.mode = 'MAP';
+        app.mapIntro.show();
+    }
+};
+</script>
+
+<!-- ═══ TIME FLASH VFX ═════════════════════════════════════════ -->
+<div id="time-flash"></div>
+
+<!-- ═══ HUD (Head Up Display - IN-GAME) ══════════════════════ -->
+<div id="c-hud">
+
+    <!-- Bouton Time Travel (Haut Centre) -->
+    <div id="btn-time-travel" class="tt-btn is-day" title="Changer de dimension temporelle">
+        <div class="tt-inner">
+            <!-- Soleil SVG -->
+            <span class="tt-icon-day">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="4"/>
+                    <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+                    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+                    <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+                </svg>
+            </span>
+            <div class="tt-divider"></div>
+            <!-- Lune SVG -->
+            <span class="tt-icon-night">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </span>
+        </div>
+        <span class="tt-label">Mode Jour</span>
+    </div>
+
+    <!-- (La boussole hors-champ a été supprimée suite à la demande V6) -->
+
+    <!-- Logo Traca (supprimé selon demande) -->
+    
+    <!-- Bouton Retour à la Map (Haut Gauche) -->
+    <button id="btn-hud-back-map" class="hud-icon-btn" title="Retour à la carte" onclick="window.hudBackToMap()" style="position:fixed; top:20px; left:20px; z-index:1000; display:flex; align-items:center; gap:6px; font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:1.5px; padding:8px 14px; color:rgba(231,186,128,0.9); border:1px solid rgba(231,186,128,0.3); border-radius:6px; background:rgba(0,0,0,0.45); backdrop-filter:blur(8px); cursor:pointer; transition:all .2s; white-space:nowrap;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Carte
+    </button>
+
+    <!-- Contrôles audio (haut droite) -->
+    <div class="hud-controls">
+        <button id="btn-hud-stopvoice" class="c-hud-btn btn-danger" style="display:none;">
+            <!-- Stop icon -->
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+            Stop Voix
+        </button>
+        <!-- Bouton Accueil / Landing -->
+        <button id="btn-hud-home" class="btn-hud-home" title="Retour au menu principal" onclick="window.location.href='../../index.html'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        </button>
+        <!-- Volume / Mute SVG btn -->
+        <button id="btn-hud-mute" class="hud-icon-btn" title="Couper le son">
+            <!-- Volume ON -->
+            <svg class="icon-vol-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+            <!-- Volume OFF (hidden by default) -->
+            <svg class="icon-vol-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="display:none;">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+        </button>
+        
+        <!-- Gyroscope / Device Orientation btn -->
+        <button id="btn-hud-gyro" class="hud-icon-btn" title="Activer mode Gyroscope">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                <line x1="12" y1="18" x2="12.01" y2="18"/>
+                <path d="M12 2v2"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- placeholder removed -->
+
+    <!-- Bouton Scan Next (Apparaît quand tous les POIs sont visités) -->
+    <style>
+        @keyframes pulse-btn-scan {
+            0% { box-shadow: 0 0 0 0 rgba(231,186,128,0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(231,186,128,0); }
+            100% { box-shadow: 0 0 0 0 rgba(231,186,128,0); }
+        }
+    </style>
+    <button id="btn-scan-next" onclick="window.location.href = '../../index.html?scanner=true';" style="display:none; position:fixed; bottom:40px; right:30px; z-index:9999; pointer-events:auto !important; padding:14px 28px; font-family:'Cinzel',serif; font-size:1.1rem; font-weight:700; letter-spacing:1px; background:linear-gradient(135deg, rgba(231,186,128,0.95), rgba(181,136,78,0.95)); color:#111; border:1px solid rgba(255,255,255,0.4); border-radius:30px; cursor:pointer; align-items:center; gap:12px; transition:transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: pulse-btn-scan 2s infinite;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+        <span>Lieu Suivant</span>
+    </button>
+</div>
+
+<!-- ═══ EAGLE VISION OVERLAY (hors HUD pour pointer-events) ═══ -->
+<style>
+    @keyframes shake-reveal {
+        0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); }
+        10% { transform: translate(-5px,-5px) rotate(-0.8deg) scale(1.005); }
+        20% { transform: translate(6px,3px) rotate(0.8deg) scale(0.997); }
+        30% { transform: translate(-7px,5px) rotate(-0.5deg) scale(1.005); }
+        40% { transform: translate(7px,-5px) rotate(0.5deg) scale(0.995); }
+        50% { transform: translate(-5px,5px) rotate(0) scale(1.003); }
+        60% { transform: translate(5px,-3px) rotate(0.5deg) scale(0.998); }
+        70% { transform: translate(-3px,5px) rotate(-0.5deg) scale(1); }
+        80% { transform: translate(5px,-5px) rotate(0.5deg) scale(1.002); }
+        90% { transform: translate(-5px,3px) rotate(0) scale(0.999); }
+    }
+    .shake-active { animation: shake-reveal 0.7s cubic-bezier(.36,.07,.19,.97) both; }
+
+    #eagle-vision-canvas {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 800;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    #eagle-vision-canvas.active { opacity: 1; }
+
+    #hidden-reward-popup {
+        display: none;
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%,-50%) scale(0.85);
+        z-index: 9000;
+        width: min(85vw, 340px);
+        background: linear-gradient(145deg, rgba(12,8,4,0.98), rgba(25,15,5,0.98));
+        border: 1px solid rgba(231,186,128,0.5);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 0 60px rgba(231,186,128,0.2), 0 20px 60px rgba(0,0,0,0.9);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+        pointer-events: auto;
+    }
+    #hidden-reward-popup .popup-glow {
+        position: absolute; top: -40px; left: 50%;
+        transform: translateX(-50%);
+        width: 180px; height: 180px;
+        background: radial-gradient(circle, rgba(231,186,128,0.25) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    #hidden-reward-popup .popup-icon {
+        font-size: 2.5rem;
+        margin: 24px 0 8px;
+        display: block;
+        filter: drop-shadow(0 0 12px rgba(231,186,128,0.8));
+    }
+    #hidden-reward-popup .popup-title {
+        font-family: 'Cinzel', serif;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        color: #e7ba80;
+        text-transform: uppercase;
+        margin: 0 0 4px;
+        text-shadow: 0 0 20px rgba(231,186,128,0.5);
+    }
+    #hidden-reward-popup .popup-subtitle {
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+        color: rgba(231,186,128,0.5);
+        text-transform: uppercase;
+        margin-bottom: 16px;
+    }
+    #hidden-reward-popup .popup-divider {
+        width: 60%; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(231,186,128,0.4), transparent);
+        margin: 0 auto 16px;
+    }
+    #hidden-reward-popup .popup-name {
+        font-family: 'Cinzel', serif;
+        font-size: 1.3rem;
+        color: #fff;
+        margin-bottom: 8px;
+        text-shadow: 0 2px 20px rgba(231,186,128,0.4);
+    }
+    #hidden-reward-popup .popup-desc {
+        font-size: 0.82rem;
+        color: rgba(200,190,180,0.8);
+        line-height: 1.5;
+        padding: 0 20px 20px;
+    }
+    #hidden-reward-popup .popup-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 20px 24px;
+        pointer-events: auto;
+    }
+    #hidden-reward-popup .btn-add-inv {
+        padding: 12px;
+        background: linear-gradient(135deg, #e7ba80, #b5884e);
+        color: #111;
+        border: none;
+        border-radius: 6px;
+        font-family: 'Cinzel', serif;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(231,186,128,0.3);
+        transition: all 0.2s;
+        pointer-events: auto;
+    }
+    #hidden-reward-popup .btn-add-inv:hover { transform: translateY(-1px); box-shadow: 0 6px 25px rgba(231,186,128,0.5); }
+    #hidden-reward-popup .btn-close-r {
+        padding: 10px;
+        background: transparent;
+        border: 1px solid rgba(231,186,128,0.3);
+        color: rgba(231,186,128,0.7);
+        border-radius: 6px;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.2s;
+        pointer-events: auto;
+    }
+    #hidden-reward-popup .btn-close-r:hover { border-color: #e7ba80; color: #e7ba80; }
+</style>
+
+<canvas id="eagle-vision-canvas"></canvas>
+
+<div id="hidden-reward-popup">
+    <div class="popup-glow"></div>
+    <span class="popup-icon">🗝️</span>
+    <p class="popup-title">Artéfact Révélé</p>
+    <p class="popup-subtitle">Découverte · Casbah d'Alger</p>
+    <div class="popup-divider"></div>
+    <p class="popup-name">La Clé de Djémila</p>
+    <p class="popup-desc">Une clé en bronze finement ouvragée, datant du XIIe siècle. Elle aurait appartenu au gouverneur de la citadelle et ouvrirait une porte secrète menant aux souterrains.</p>
+    <div class="popup-actions">
+        <button class="btn-add-inv" onclick="window.app && window.app._closeRewardPopup(true)">✦ Ajouter à l'inventaire</button>
+        <button class="btn-close-r" onclick="window.app && window.app._closeRewardPopup(false)">Fermer</button>
+    </div>
+</div>
+
+<!-- ═══ PANNEAU ÉDITEUR (RESTYLISÉ V10) ═══════════════════════════════════════ -->
+<style>
+    #c-editor {
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 450px;
+        background: rgba(20, 15, 10, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-left: 1px solid rgba(231, 186, 128, 0.2);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        /* Permettre le redimensionnement horizontal depuis la gauche (en forçant le RTL sur le container parent) */
+        direction: rtl;
+        resize: horizontal;
+        min-width: 350px;
+        max-width: 800px;
+        overflow: hidden;
+    }
+    #c-editor > * { direction: ltr; } /* Contenu normal */
+
+    .ced-header-v10 {
+        padding: 15px 20px;
+        border-bottom: 1px solid rgba(231, 186, 128, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(0,0,0,0.2);
+    }
+    .ced-title-v10 { font-size: 1.1rem; font-weight: 700; color: #e7ba80; letter-spacing: 1px;}
+    .ced-toolbar-v10 { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 20px; background: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+    .ced-body-v10 {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .c-btn.import-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    .c-btn.import-btn:hover { background: rgba(255,255,255,0.2); }
+    
+    .poi-type-toggle {
+        display: flex; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 6px;
+    }
+    .type-btn {
+        flex: 1; padding: 8px; text-align: center; border-radius: 4px; cursor: pointer;
+        font-size: 0.85rem; transition: all 0.2s; border: 1px solid transparent; color: rgba(255,255,255,0.6);
+    }
+    .type-btn.active.tgt-object { background: rgba(74, 222, 128, 0.15); color: #4ade80; border-color: #4ade80; }
+    .type-btn.active.tgt-character { background: rgba(231, 186, 128, 0.15); color: #e7ba80; border-color: #e7ba80; }
+</style>
+
+<div id="c-editor" style="display:none;">
+    <!-- En-tête -->
+    <div class="ced-header-v10">
+        <span class="ced-title-v10">🛠 Éditeur Casbah</span>
+        <button id="btn-ed-exit" class="c-hud-btn" style="padding: 5px 10px; font-size: 0.8rem;">✕ Fermer</button>
+    </div>
+
+    <!-- Barre d'outils secondaire -->
+    <div class="ced-toolbar-v10">
+        <button id="btn-ed-time" class="c-btn sm ghost" style="color:#e7ba80; border-color:rgba(231,186,128,0.4);">☀️ Jour</button>
+        <button id="btn-set-startcam" class="c-btn sm ghost" style="color:#a8a8a8; border-color:rgba(255,255,255,0.2);">📸 Set Cam</button>
+        <div style="flex:1"></div>
+        
+        <!-- Input file caché -->
+        <input type="file" id="file-import" accept=".json" style="display:none;">
+        <button id="btn-import-scenario" class="c-btn sm import-btn">📂 IMPORTER JSON</button>
+        <button id="btn-export-scenario" class="c-btn sm primary" style="background:#e7ba80; color:#1a110a; border:none;">📥 EXPORTER JSON</button>
+    </div>
+
+    <div class="ced-body-v10">
+        <!-- Liste des Points -->
+        <div class="ced-list-toolbar" style="padding: 15px 20px 5px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:600; font-size:0.9rem; color:#ccc;">Vos Points d'Intérêt</span>
+            <button id="btn-add-poi" class="c-btn primary sm" style="padding:4px 10px;">+ Ajouter POI</button>
+        </div>
+        <ul id="poi-list" style="margin: 0 10px; max-height: 200px; overflow-y: auto; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+            <li class="poi-empty">Aucun point — Cliquez sur "+ Ajouter POI"</li>
+        </ul>
+
+        <!-- Formulaire d'édition -->
+        <div class="ced-form-col" id="ced-form" style="padding: 20px;" hidden>
+            <p class="ced-form-hint" id="ced-hint" style="background: rgba(74, 222, 128, 0.05); padding:10px; border-radius:6px; border: 1px dashed #4ade80; color:#4ade80; font-size:0.85rem; margin-top:0;">👉 Cliquez maintenant sur la scène pour placer ou déplacer ce point.</p>
+            
+            <input type="hidden" id="poi-edit-id">
+            <input type="hidden" id="poi-temp-x">
+            <input type="hidden" id="poi-temp-y">
+            <input type="hidden" id="poi-temp-z">
+            <input type="hidden" id="poi-type-hidden" value="object">
+
+            <!-- Sélecteur de Type Custom -->
+            <div class="poi-type-toggle">
+                <div class="type-btn active tgt-object" data-val="object">📍 Objet / Anecdote</div>
+                <div class="type-btn tgt-character" data-val="character">👤 Personnage</div>
+            </div>
+
+            <!-- Titre Principal -->
+            <div class="ced-field" style="margin-bottom:20px;">
+                <label id="lbl-poi-title">Titre / Nom du Point (Affiché en jeu)</label>
+                <input type="text" id="poi-title" placeholder="Ex: La Source d'Alger, Lalla Khadija...">
+            </div>
+
+            <!-- ZONE OBJET -->
+            <div id="wrap-poi-object" style="display:block;">
+                <div class="ced-field" style="margin-bottom:15px;">
+                    <label>📝 Description (Menu statique de l'UI)</label>
+                    <textarea id="poi-desc" rows="3" placeholder="Texte d'information général..."></textarea>
+                </div>
+                <div class="ced-field" style="margin-bottom:15px;">
+                    <label>🗣 Transcription Narrateur (Sous-titres synchronisés)</label>
+                    <textarea id="poi-trans" rows="3" placeholder="Texte dit par le narrateur (الراوي قال)..."></textarea>
+                </div>
+                <div class="ced-field" style="margin-bottom:15px;">
+                    <label>🎵 Audio Narrateur (Voix associée)</label>
+                    <select id="poi-audio" class="rep-audio">
+                        <option value="">-- Aucun audio --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ZONE PERSONNAGE -->
+            <div id="wrap-poi-character" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <label style="margin:0; color:#e7ba80; font-size:0.9rem;">Séquences / Répliques du Personnage</label>
+                    <button class="c-btn ghost sm" id="btn-add-replica" style="padding:4px 10px; font-size:0.75rem; border:1px solid #e7ba80; color:#e7ba80;">+ Ajouter Séquence</button>
+                </div>
+                <div id="dynamic-replicas-container" style="display:flex; flex-direction:column; gap:15px;">
+                    <!-- Injecté par JS -->
+                </div>
+            </div>
+            
+            <div class="ced-form-actions" style="margin-top:30px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button id="btn-poi-save" class="c-btn primary" style="flex:1; background:#4ade80; color:#0e1f13; border:none; padding:12px;">💾 Enregistrer</button>
+                <button id="btn-poi-delete" class="c-btn danger" style="padding:12px;" hidden>🗑 Supprimer</button>
+                <button id="btn-poi-cancel" class="c-btn ghost" style="padding:12px;">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ CANVAS WebGL + CSS2D ════════════════════════════════ -->
+<div id="c-canvas-wrap">
+    <!-- Le canvas Three.js sera injecté ici -->
+    <div id="c-css2d"></div><!-- CSS2DRenderer (pointer-events:none) -->
+</div>
+
+<!-- ═══ APP SCRIPT ═══════════════════════════════════════════ -->
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

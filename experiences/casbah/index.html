@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNXLY71ZFL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LNXLY71ZFL');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>La Casbah d'Alger — Visite 360°</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/webp" href="../../assets/levels/level_01_casbah/global/ui/logo_traca.webp">
+
+    <link rel="stylesheet" href="../../src/css/base.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+<!-- ═══ LOADER (Design Dynamique Type Casbah) ═══ -->
+<div id="c-loader">
+    <div class="c-loader-inner">
+        <!-- Logo TRACA — Agrandi -->
+        <img src="../../assets/levels/level_01_casbah/global/ui/logo_traca.webp"
+             alt="Logo TRACA"
+             class="c-loader-logo" style="width:130px; height:130px; margin-bottom:2rem; object-fit:contain; opacity:0.8; filter:drop-shadow(0 0 20px rgba(231,186,128,0.4)); animation: pulse-logo 2.5s ease-in-out infinite;">
+
+        <!-- Barre de progression Casbah-style -->
+        <p class="c-loader-label" id="c-loader-label" style="font-family:'Cinzel', serif; font-size:0.8rem; letter-spacing:0.15em; color:#99784e; margin-bottom:1.5rem; text-transform:uppercase;">Chargement de l'environnement…</p>
+        <div class="c-loader-bar-wrap" style="width:100%; height:2px; background:rgba(231,186,128,0.1); margin-bottom:0.5rem; overflow:hidden;">
+            <div id="c-loader-bar" style="width:0%; height:100%; background:linear-gradient(90deg, transparent, #e7ba80, transparent); background-size:200% 100%; transition:width 0.2s ease; animation:shimmer 1.5s infinite;"></div>
+        </div>
+        <span id="c-loader-pct" style="font-family:monospace; font-size:0.75rem; color:rgba(255,255,255,0.5);">0%</span>
+
+        <!-- Astuce casque -->
+        <p class="intro-hint" style="margin-top: 1.5rem;">
+            <span class="headphones-icon">🎧</span>
+            Mettez vos écouteurs pour une expérience optimale
+        </p>
+
+        <!-- Bouton Entrer (affiché par JS quand 100%) -->
+        <button id="c-loader-enter" style="display:inline-block; opacity:0.4; pointer-events:none; filter:grayscale(100%); margin-top:1.5rem; border:1px solid rgba(231,186,128,0.4); background:rgba(10,10,10,0.8); color:#e7ba80; padding:10px 24px; font-family:'Cinzel',serif; cursor:not-allowed;">
+            ✦ Entrer dans l'expérience
+        </button>
+    </div>
+</div>
+
+
+
+<!-- ═══ TIME FLASH VFX ═════════════════════════════════════════ -->
+<div id="time-flash"></div>
+
+
+
+<!-- ═══ HUD (Head Up Display - IN-GAME) ══════════════════════ -->
+<div id="c-hud">
+
+    <!-- Bouton Time Travel (Haut Centre) -->
+    <div id="btn-time-travel" class="tt-btn is-day" title="Changer de dimension temporelle">
+        <div class="tt-inner">
+            <!-- Soleil SVG -->
+            <span class="tt-icon-day">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="4"/>
+                    <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+                    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+                    <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+                </svg>
+            </span>
+            <div class="tt-divider"></div>
+            <!-- Lune SVG -->
+            <span class="tt-icon-night">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </span>
+        </div>
+        <span class="tt-label">Mode Jour</span>
+    </div>
+
+    <!-- (La boussole hors-champ a été supprimée suite à la demande V6) -->
+
+    <!-- Logo Traca (supprimé selon demande) -->
+    
+    <!-- Bouton Retour à la Map (Haut Gauche) -->
+    <button id="btn-hud-back-map" class="hud-icon-btn" title="Retour à la carte" onclick="window.hudBackToMap()" style="position:fixed; top:20px; left:20px; z-index:1000; display:flex; align-items:center; gap:6px; font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:1.5px; padding:8px 14px; color:rgba(231,186,128,0.9); border:1px solid rgba(231,186,128,0.3); border-radius:6px; background:rgba(0,0,0,0.45); backdrop-filter:blur(8px); cursor:pointer; transition:all .2s; white-space:nowrap;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Carte
+    </button>
+
+    <!-- Bouton Aide (Bas Gauche) -->
+    <button id="btn-hud-help" class="hud-icon-btn" title="Aide" style="position:fixed; bottom:20px; left:20px; z-index:1000; display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:rgba(0,0,0,0.45); border:1px solid rgba(231,186,128,0.3); color:rgba(231,186,128,0.9); backdrop-filter:blur(8px); cursor:pointer; transition:all .2s;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+    </button>
+
+    <!-- Contrôles audio (haut droite) -->
+    <div class="hud-controls">
+        <button id="btn-hud-stopvoice" class="c-hud-btn btn-danger" style="display:none;">
+            <!-- Stop icon -->
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+            Stop Voix
+        </button>
+        <!-- Bouton Accueil / Landing -->
+        <button id="btn-hud-home" class="btn-hud-home" title="Retour au menu principal" onclick="window.location.href='../../index.html'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        </button>
+        <!-- Volume / Mute SVG btn -->
+        <button id="btn-hud-mute" class="hud-icon-btn" title="Couper le son">
+            <!-- Volume ON -->
+            <svg class="icon-vol-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+            <!-- Volume OFF (hidden by default) -->
+            <svg class="icon-vol-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="display:none;">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+        </button>
+        <!-- Eagle Vision btn (Nuit) -->
+        <button id="btn-hud-eagle" class="hud-icon-btn" title="Vision d'Aigle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>
+        </button>
+
+        <!-- Gyroscope / Device Orientation btn -->
+        <button id="btn-hud-gyro" class="hud-icon-btn" title="Activer mode Gyroscope">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                <line x1="12" y1="18" x2="12.01" y2="18"/>
+                <path d="M12 2v2"/>
+            </svg>
+        </button>
+
+        <!-- Coordonnées Debug (Dev/Mobile) - Désactivé par défaut -->
+        <button id="btn-hud-debug-coords" class="hud-icon-btn" title="Mode Coordonnées (Déplacement flèches)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <circle cx="12" cy="12" r="3"/>
+                <line x1="12" y1="2" x2="12" y2="6"/>
+                <line x1="12" y1="18" x2="12" y2="22"/>
+                <line x1="2" y1="12" x2="6" y2="12"/>
+                <line x1="18" y1="12" x2="22" y2="12"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- placeholder removed -->
+
+    <!-- Bouton Scan Next (Apparaît quand tous les POIs sont visités) -->
+    <style>
+        @keyframes pulse-btn-scan {
+            0% { box-shadow: 0 0 0 0 rgba(231,186,128,0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(231,186,128,0); }
+            100% { box-shadow: 0 0 0 0 rgba(231,186,128,0); }
+        }
+    </style>
+    <button id="btn-scan-next" onclick="window.location.href = '../../index.html?scanner=true';" style="display:none; position:fixed; bottom:40px; right:30px; z-index:9999; pointer-events:auto !important; padding:14px 28px; font-family:'Cinzel',serif; font-size:1.1rem; font-weight:700; letter-spacing:1px; background:linear-gradient(135deg, rgba(231,186,128,0.95), rgba(181,136,78,0.95)); color:#111; border:1px solid rgba(255,255,255,0.4); border-radius:30px; cursor:pointer; align-items:center; gap:12px; transition:transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: pulse-btn-scan 2s infinite;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+        <span>Lieu Suivant</span>
+    </button>
+</div>
+
+<!-- ═══ EAGLE VISION OVERLAY (hors HUD pour pointer-events) ═══ -->
+<style>
+    @keyframes shake-reveal {
+        0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); }
+        10% { transform: translate(-5px,-5px) rotate(-0.8deg) scale(1.005); }
+        20% { transform: translate(6px,3px) rotate(0.8deg) scale(0.997); }
+        30% { transform: translate(-7px,5px) rotate(-0.5deg) scale(1.005); }
+        40% { transform: translate(7px,-5px) rotate(0.5deg) scale(0.995); }
+        50% { transform: translate(-5px,5px) rotate(0) scale(1.003); }
+        60% { transform: translate(5px,-3px) rotate(0.5deg) scale(0.998); }
+        70% { transform: translate(-3px,5px) rotate(-0.5deg) scale(1); }
+        80% { transform: translate(5px,-5px) rotate(0.5deg) scale(1.002); }
+        90% { transform: translate(-5px,3px) rotate(0) scale(0.999); }
+    }
+    .shake-active { animation: shake-reveal 0.7s cubic-bezier(.36,.07,.19,.97) both; }
+
+    #eagle-vision-canvas {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 800;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    #eagle-vision-canvas.active { opacity: 1; }
+
+    #hidden-reward-popup {
+        display: none;
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%,-50%) scale(0.85);
+        z-index: 9000;
+        width: min(85vw, 360px);
+        background: rgba(15, 10, 5, 0.95);
+        border: 1px solid rgba(231,186,128,0.4);
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+        pointer-events: auto;
+    }
+    #hidden-reward-popup .popup-icon {
+        font-size: 1.8rem;
+        margin: 24px 0 8px;
+        display: block;
+        text-align: center;
+    }
+    #hidden-reward-popup .popup-img-wrap {
+        display: flex;
+        justify-content: center;
+        margin: 24px 0 12px;
+    }
+    #hidden-reward-popup .popup-img {
+        max-width: 80px;
+        max-height: 80px;
+        object-fit: contain;
+    }
+    #hidden-reward-popup .popup-title {
+        font-family: 'Cinzel', serif;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        color: #e7ba80;
+        text-transform: uppercase;
+        margin: 0 0 4px;
+        text-align: center;
+    }
+    #hidden-reward-popup .popup-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        color: rgba(231,186,128,0.6);
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+    #hidden-reward-popup .popup-divider {
+        width: 60%; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(231,186,128,0.4), transparent);
+        margin: 0 auto 16px;
+    }
+    #hidden-reward-popup .popup-name {
+        font-family: 'Cinzel', serif;
+        font-size: 1.4rem;
+        color: #fff;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+    #hidden-reward-popup .popup-desc {
+        font-size: 0.95rem;
+        color: rgba(220,210,200,0.9);
+        line-height: 1.6;
+        padding: 0 24px 24px;
+        text-align: center;
+    }
+    #hidden-reward-popup .popup-actions {
+        display: flex;
+        flex-direction: column;
+        padding: 0 24px 24px;
+        pointer-events: auto;
+    }
+    #hidden-reward-popup .btn-close-r {
+        padding: 12px;
+        background: linear-gradient(135deg, #e7ba80, #b5884e);
+        color: #111;
+        border: none;
+        border-radius: 4px;
+        font-family: 'Cinzel', serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        pointer-events: auto;
+    }
+    #hidden-reward-popup .btn-close-r:hover { filter: brightness(1.1); }
+</style>
+
+<canvas id="eagle-vision-canvas"></canvas>
+
+<div id="hidden-reward-popup">
+    <!-- Contenu injecté via EagleVisionModule -->
+    <span class="popup-icon">🗝️</span>
+    <p class="popup-title">Artéfact Révélé</p>
+    <p class="popup-subtitle">Découverte · Casbah d'Alger</p>
+    <div class="popup-divider"></div>
+    <p class="popup-name">La Clé de Djémila</p>
+    <p class="popup-desc">Une clé en bronze finement ouvragée...</p>
+    <div class="popup-actions">
+        <button class="btn-close-r" onclick="window.app && window.app._closeRewardPopup(true)">Fermer</button>
+    </div>
+</div>
+
+<!-- ═══ ONBOARDING TUTORIAL PANEL ═══ -->
+<div id="c-tutorial-panel" class="traca-tutorial-panel">
+    <div class="tutorial-icon-wrap">
+        <span id="c-tutorial-icon">📱</span>
+    </div>
+    <div class="tutorial-content">
+        <h3 id="c-tutorial-title">Mode Gyroscope</h3>
+        <p id="c-tutorial-text">Tourne ton téléphone pour explorer la Casbah naturellement.</p>
+    </div>
+    <div class="tutorial-tap-hint">Appuie pour fermer</div>
+</div>
+
+<!-- ═══ BARRE D'INVENTAIRE INFÉRIEURE ═══ -->
+<div id="c-inventory-bar">
+    <div id="c-inventory-slots" class="inv-slots-container">
+        <!-- Rempli dynamiquement par InventoryModule -->
+    </div>
+    <div class="inv-divider" style="display: none;"></div>
+    <button id="btn-open-inventory" title="Ouvrir le Codex & Inventaire">
+        <svg class="inv-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        <span>Codex</span>
+    </button>
+</div>
+
+<!-- ═══ MODAL D'INVENTAIRE GLOBAL (CODEX) ═══ -->
+<div id="c-inventory-modal" style="display: none;">
+    <div class="modal-overlay" id="modal-overlay-close"></div>
+    <div class="modal-chest">
+
+        <div class="chest-header">
+            <button class="modal-close-btn" id="btn-close-modal" title="Fermer">&#x2715;</button>
+            <h2>CODEX DES ARTÉFACTS</h2>
+            <p class="chest-subtitle">Découvertes de la Casbah d'Alger</p>
+        </div>
+
+        <div class="chest-body">
+            <div class="artifacts-grid" id="c-codex-grid">
+            </div>
+            <div class="chest-separator"></div>
+            <div class="details-panel" id="chest-details-panel">
+                <p class="select-hint">Sélectionnez un artéfact pour lire ses secrets...</p>
+            </div>
+        </div>
+
+        <div class="chest-footer">
+            <button class="btn-reset-quest">Réinitialiser la Collection</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══ PANNEAU ÉDITEUR (RESTYLISÉ V10) ═══════════════════════════════════════ -->
+<style>
+    #c-editor {
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 450px;
+        background: rgba(20, 15, 10, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-left: 1px solid rgba(231, 186, 128, 0.2);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        /* Permettre le redimensionnement horizontal depuis la gauche (en forçant le RTL sur le container parent) */
+        direction: rtl;
+        resize: horizontal;
+        min-width: 350px;
+        max-width: 800px;
+        overflow: hidden;
+    }
+    #c-editor > * { direction: ltr; } /* Contenu normal */
+
+    .ced-header-v10 {
+        padding: 15px 20px;
+        border-bottom: 1px solid rgba(231, 186, 128, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(0,0,0,0.2);
+    }
+    .ced-title-v10 { font-size: 1.1rem; font-weight: 700; color: #e7ba80; letter-spacing: 1px;}
+    .ced-toolbar-v10 { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 20px; background: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+    .ced-body-v10 {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .c-btn.import-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    .c-btn.import-btn:hover { background: rgba(255,255,255,0.2); }
+    
+    .poi-type-toggle {
+        display: flex; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 6px;
+    }
+    .type-btn {
+        flex: 1; padding: 8px; text-align: center; border-radius: 4px; cursor: pointer;
+        font-size: 0.85rem; transition: all 0.2s; border: 1px solid transparent; color: rgba(255,255,255,0.6);
+    }
+    .type-btn.active.tgt-object { background: rgba(74, 222, 128, 0.15); color: #4ade80; border-color: #4ade80; }
+    .type-btn.active.tgt-character { background: rgba(231, 186, 128, 0.15); color: #e7ba80; border-color: #e7ba80; }
+</style>
+
+<div id="c-editor" style="display:none;">
+    <!-- En-tête -->
+    <div class="ced-header-v10">
+        <span class="ced-title-v10">🛠 Éditeur Casbah</span>
+        <button id="btn-ed-exit" class="c-hud-btn" style="padding: 5px 10px; font-size: 0.8rem;">✕ Fermer</button>
+    </div>
+
+    <!-- Barre d'outils secondaire -->
+    <div class="ced-toolbar-v10">
+        <button id="btn-ed-time" class="c-btn sm ghost" style="color:#e7ba80; border-color:rgba(231,186,128,0.4);">☀️ Jour</button>
+        <button id="btn-set-startcam" class="c-btn sm ghost" style="color:#a8a8a8; border-color:rgba(255,255,255,0.2);">📸 Set Cam</button>
+        <button id="btn-reset-inv" class="c-btn sm ghost" style="color:#ff6b6b; border-color:rgba(255,107,107,0.35);">🔄 Reset Inv</button>
+        <div style="flex:1"></div>
+        
+        <!-- Input file caché -->
+        <input type="file" id="file-import" accept=".json" style="display:none;">
+        <button id="btn-import-scenario" class="c-btn sm import-btn">📂 IMPORTER JSON</button>
+        <button id="btn-export-scenario" class="c-btn sm primary" style="background:#e7ba80; color:#1a110a; border:none;">📥 EXPORTER JSON</button>
+    </div>
+
+    <div class="ced-body-v10">
+        <!-- Liste des Points -->
+        <div class="ced-list-toolbar" style="padding: 15px 20px 5px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:600; font-size:0.9rem; color:#ccc;">Vos Points d'Intérêt</span>
+            <button id="btn-add-poi" class="c-btn primary sm" style="padding:4px 10px;">+ Ajouter POI</button>
+        </div>
+        <ul id="poi-list" style="margin: 0 10px; max-height: 200px; overflow-y: auto; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+            <li class="poi-empty">Aucun point — Cliquez sur "+ Ajouter POI"</li>
+        </ul>
+
+        <!-- Formulaire d'édition -->
+        <div class="ced-form-col" id="ced-form" style="padding: 20px;" hidden>
+            <p class="ced-form-hint" id="ced-hint" style="background: rgba(74, 222, 128, 0.05); padding:10px; border-radius:6px; border: 1px dashed #4ade80; color:#4ade80; font-size:0.85rem; margin-top:0;">👉 Cliquez maintenant sur la scène pour placer ou déplacer ce point.</p>
+            
+            <input type="hidden" id="poi-edit-id">
+            <input type="hidden" id="poi-temp-x">
+            <input type="hidden" id="poi-temp-y">
+            <input type="hidden" id="poi-temp-z">
+            <input type="hidden" id="poi-type-hidden" value="object">
+
+            <!-- Sélecteur de Type Custom -->
+            <div class="poi-type-toggle">
+                <div class="type-btn active tgt-object" data-val="object">📍 Objet / Anecdote</div>
+                <div class="type-btn tgt-character" data-val="character">👤 Personnage</div>
+                <div class="type-btn tgt-navigation" data-val="navigation">➡️ Flèche</div>
+            </div>
+
+            <!-- Titre Principal -->
+            <div class="ced-field" style="margin-bottom:20px;">
+                <label id="lbl-poi-title">Titre / Nom du Point (Affiché en jeu)</label>
+                <input type="text" id="poi-title" placeholder="Ex: La Source d'Alger, Lalla Khadija...">
+            </div>
+
+            <!-- ZONE OBJET -->
+            <div id="wrap-poi-object" style="display:block;">
+                <div class="ced-field" style="margin-bottom:15px;">
+                    <label>📝 Description (Menu statique de l'UI)</label>
+                    <textarea id="poi-desc" rows="3" placeholder="Texte d'information général..."></textarea>
+                </div>
+                <div class="ced-field" style="margin-bottom:15px;">
+                    <label>🗣 Transcription Narrateur (Sous-titres synchronisés)</label>
+                    <textarea id="poi-trans" rows="3" placeholder="Texte dit par le narrateur (الراوي قال)..."></textarea>
+                </div>
+                <div class="ced-field" style="margin-bottom:15px;">
+                    <label>🎵 Audio Narrateur (Voix associée)</label>
+                    <select id="poi-audio" class="rep-audio">
+                        <option value="">-- Aucun audio --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ZONE PERSONNAGE -->
+            <div id="wrap-poi-character" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <label style="margin:0; color:#e7ba80; font-size:0.9rem;">Séquences / Répliques du Personnage</label>
+                    <button class="c-btn ghost sm" id="btn-add-replica" style="padding:4px 10px; font-size:0.75rem; border:1px solid #e7ba80; color:#e7ba80;">+ Ajouter Séquence</button>
+                </div>
+                <div id="dynamic-replicas-container" style="display:flex; flex-direction:column; gap:15px;">
+                    <!-- Injecté par JS -->
+                </div>
+            </div>
+
+            <!-- ZONE NAVIGATION (FLÈCHE) -->
+            <div id="wrap-poi-navigation" style="display:none;">
+                <div class="ced-field" style="margin-bottom:15px;">
+                    <label>🎯 Nœud de destination (ID du noeud cible)</label>
+                    <input type="text" id="poi-target-node" placeholder="Ex: upstairs, room, basement...">
+                </div>
+            </div>
+            
+            <div class="ced-form-actions" style="margin-top:30px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button id="btn-poi-save" class="c-btn primary" style="flex:1; background:#4ade80; color:#0e1f13; border:none; padding:12px;">💾 Enregistrer</button>
+                <button id="btn-poi-delete" class="c-btn danger" style="padding:12px;" hidden>🗑 Supprimer</button>
+                <button id="btn-poi-cancel" class="c-btn ghost" style="padding:12px;">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ CANVAS WebGL + CSS2D ════════════════════════════════ -->
+<div id="c-canvas-wrap">
+    <!-- Le canvas Three.js sera injecté ici -->
+    <div id="c-css2d"></div><!-- CSS2DRenderer (pointer-events:none) -->
+</div>
+
+<!-- ═══ APP SCRIPT ═══════════════════════════════════════════ -->
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

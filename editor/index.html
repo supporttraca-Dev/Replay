@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replay Studio — Éditeur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --gold: #e7ba80;
+            --bg: #0a0502;
+            --panel: #130a03;
+            --border: rgba(231,186,128,0.18);
+            --text-dim: rgba(255,255,255,0.4);
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            background: var(--bg);
+            color: #fff;
+        }
+
+        /* ── VIEWPORT ── */
+        #viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+        #c-canvas-wrap {
+            position: absolute;
+            inset: 0;
+        }
+        #c-canvas-wrap canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+        #status {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            background: rgba(0,0,0,0.6);
+            padding: 4px 10px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        /* ── SIDEBAR ── */
+        #sidebar {
+            width: 300px;
+            min-width: 300px;
+            background: var(--panel);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .ed-header {
+            padding: 14px 16px;
+            background: rgba(0,0,0,0.5);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .ed-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold);
+            font-size: 1.15rem;
+        }
+        .ed-header p { font-size: 0.68rem; color: var(--text-dim); margin-top: 2px; }
+
+        .ed-scroll {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ed-section {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            flex-shrink: 0;
+        }
+        .ed-section h4 {
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: rgba(231,186,128,0.6);
+            margin-bottom: 10px;
+        }
+
+        /* ── FORM ELEMENTS ── */
+        .form-row { margin-bottom: 8px; }
+        .form-row label { display: block; font-size: 0.68rem; color: var(--text-dim); margin-bottom: 4px; }
+        .form-row select,
+        .form-row input[type="text"],
+        .form-row textarea {
+            width: 100%;
+            padding: 7px 9px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+        }
+        .form-row textarea { resize: vertical; min-height: 56px; }
+        .form-row select:focus,
+        .form-row input:focus,
+        .form-row textarea:focus { border-color: var(--gold); outline: none; }
+        .form-row select option { background: #1a0f05; }
+
+        .coords { display: flex; gap: 6px; }
+        .coords input { width: 0; flex: 1; font-size: 0.7rem; }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            padding: 8px 12px; border-radius: 4px; border: none; cursor: pointer;
+            font-family: 'Montserrat', sans-serif; font-size: 0.78rem; font-weight: 600;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+        .btn:hover { opacity: 0.85; }
+        .btn:active { transform: scale(0.97); }
+
+        .btn-gold  { background: var(--gold); color: #0a0502; width: 100%; }
+        .btn-ghost { background: transparent; border: 1px dashed var(--gold); color: var(--gold); width: 100%; }
+        .btn-green { background: #4ade80; color: #000; flex: 1; }
+        .btn-red   { background: #ef4444; color: #fff; flex: 1; }
+        .btn-place { background: rgba(100,200,255,0.15); border: 1px solid rgba(100,200,255,0.4); color: #60d0ff; width: 100%; margin-top: 4px; }
+
+        .btn-row { display: flex; gap: 8px; margin-top: 10px; }
+
+        /* ── POI LIST ── */
+        #poi-list { list-style: none; padding: 4px 0; }
+        #poi-list li:hover { background: rgba(255,255,255,0.05); border-radius: 4px; }
+
+        /* ── POI FORM ── */
+        #poi-form {
+            display: none;
+            flex-direction: column;
+            gap: 0;
+        }
+        #poi-form.visible { display: flex; }
+
+        /* ── FOOTER ── */
+        .ed-footer {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+            background: rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<!-- VIEWPORT 360° -->
+<div id="viewport">
+    <div id="c-canvas-wrap"></div>
+    <div id="status">Initialisation…</div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+    <div class="ed-header">
+        <h2>Replay Studio</h2>
+        <p>Éditeur de Niveaux — v0.1</p>
+    </div>
+
+    <div class="ed-scroll">
+
+        <!-- NAVIGATION SCÈNE -->
+        <div class="ed-section">
+            <h4>Scène active</h4>
+            <div class="form-row">
+                <label>Nœud</label>
+                <select id="scene-select"></select>
+            </div>
+            <div class="form-row">
+                <label>Mode de temps</label>
+                <select id="mode-select">
+                    <option value="day">☀️ Jour</option>
+                    <option value="night">🌙 Nuit</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- LISTE DES POIs -->
+        <div class="ed-section">
+            <h4>Points d'intérêt</h4>
+            <ul id="poi-list"></ul>
+            <button class="btn btn-ghost" id="btn-add-poi" style="margin-top:8px">+ Nouveau point</button>
+        </div>
+
+        <!-- FORMULAIRE D'ÉDITION POI -->
+        <div class="ed-section" id="poi-form">
+            <h4 id="form-heading">Nouveau point</h4>
+
+            <input type="hidden" id="form-id">
+
+            <div class="form-row">
+                <label>Type</label>
+                <select id="form-type">
+                    <option value="object">🏺 Objet</option>
+                    <option value="character">👤 Personnage</option>
+                    <option value="navigation">↑ Flèche Navigation</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Visibilité</label>
+                <select id="form-time">
+                    <option value="day">☀️ Jour</option>
+                    <option value="night">🌙 Nuit</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Titre (FR)</label>
+                <input type="text" id="form-title" placeholder="Nom du point…">
+            </div>
+
+            <div class="form-row">
+                <label>Description / Transcription</label>
+                <textarea id="form-desc" placeholder="Texte affiché au joueur…"></textarea>
+            </div>
+
+            <div class="form-row">
+                <label>Audio</label>
+                <select id="form-audio">
+                    <option value="">— Aucun —</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Position 3D (X · Y · Z)</label>
+                <div class="coords">
+                    <input type="text" id="form-x" placeholder="X" readonly>
+                    <input type="text" id="form-y" placeholder="Y" readonly>
+                    <input type="text" id="form-z" placeholder="Z" readonly>
+                </div>
+            </div>
+
+            <button class="btn btn-place" id="btn-place-poi">🎯 Cliquer sur la scène pour placer</button>
+
+            <div class="btn-row">
+                <button class="btn btn-green" id="btn-save-poi">Sauvegarder</button>
+                <button class="btn btn-red"   id="btn-del-poi">Supprimer</button>
+            </div>
+        </div>
+
+    </div><!-- /ed-scroll -->
+
+    <div class="ed-footer">
+        <button class="btn btn-gold" id="btn-export">💾 Exporter le niveau</button>
+    </div>
+
+</div><!-- /sidebar -->
+
+<script type="module" src="./main_editor.js"></script>
+</body>
+</html>

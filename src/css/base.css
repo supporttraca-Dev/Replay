@@ -1,0 +1,73 @@
+:root {
+    /* Colors */
+    --gold: #e7ba80;
+    --gold-dim: rgba(212, 168, 83, 0.6);
+    --gold-faint: rgba(212, 168, 83, 0.12);
+    --dark: #06050a;
+    --bg-dark: #0a0a09;          /* alias for experience pages */
+    --dark-surface: #0c0b12;
+    --white: #ffffff;
+    
+    /* Typography */
+    --font-heading: 'Cinzel', serif;
+    --font-body: 'Cormorant Garamond', serif;
+    
+    /* Transitions */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-slow: 0.8s var(--ease-out-expo);
+    --transition-medium: 0.5s var(--ease-out-expo);
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--dark);
+    color: var(--gold);
+    font-family: var(--font-heading);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar for Desktop */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gold-faint);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-dim);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition-medium);
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+}
+
+canvas {
+    display: block;
+}
+
+img {
+    max-width: 100%;
+}

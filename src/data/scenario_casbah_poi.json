@@ -1,0 +1,256 @@
+﻿{
+    "metadata": {
+        "exportedAt": "2026-04-13T21:57:01.890Z",
+        "description": "Export Static Editor Casbah V10",
+        "version": "10.0"
+    },
+    "settings": {
+        "startCam": {
+            "az": 1.5856460275171018,
+            "pol": 1.3762056082747058
+        }
+    },
+    "pois": [
+        {
+            "id": "poi_1776113034660",
+            "position": {
+                "x": 75.11435879621929,
+                "y": -73.5111009784146,
+                "z": -487.98100573597793
+            },
+            "audio": "../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/narration/01_narration.mp3",
+            "poiType": "object",
+            "timeMode": "day",
+            "replicas": [],
+            "_replicaIndex": 0,
+            "content": {
+                "fr": {
+                    "title": "Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹",
+                    "description": "ÙÙŠ Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹ØŒ Ù‡Ø§Ø¯ Ø§Ù„Ø¨Ø§Ø¨ Ø¯ Ø§Ù„ÙÙŠÙ„Ù‘Ø§ Ø¹Ù†Ø¯Ùˆ Ø­ÙƒØ§ÙŠØ© Ø®Ø§ØµØ© Ø¨ÙŠÙ‡. ØªØµØ§ÙˆØ¨ Ø¨Ø§Ù„Ø­Ø±ÙØ© Ù…Ù† Ø®Ø´Ø¨ Ù‚ÙˆÙŠ ÙˆÙ…Ø¹Ø§Ù‡ ØªÙØ§ØµÙŠÙ„ Ù…Ù† Ø­Ø¯ÙŠØ¯ Ù…Ø®Ø¯ÙˆÙ…ÙŠÙ† Ø¨Ø§Ù„Ø¯Ù‚Ø©ØŒ Ù…Ø³ØªÙˆØ­ÙŠ Ù…Ù† Ø§Ù„ØµÙ†Ø§Ø¹Ø© Ø§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠØ©. ÙƒÙ„ Ù†Ù‚Ø´Ø© ÙÙŠÙ‡ Ø®Ø¯Ù…Ø© ÙˆÙƒÙ„ Ø¯ÙˆØ±Ø© Ù…Ø¹Ù…ÙˆÙ„Ø© Ø¨Ø§Ù„ÙŠØ¯ØŒ Ø¨Ø§Ø´ ÙŠØ®Ø±Ø¬ Ø¨Ø§Ø¨ ÙØ±ÙŠØ¯ ÙˆÙ…Ø§ÙƒØ§ÙŠÙ†Ø´ ÙƒÙŠÙÙˆ.\n\nÙ…Ø§Ø´ÙŠ ØºÙŠØ± Ù…Ø¯Ø®Ù„ØŒ Ù‡Ø§Ø¯Ø§ Ø¨ØµØ­ Ù‡ÙˆÙŠØ© Ø§Ù„Ø¯Ø§Ø±. ÙƒÙŠØ­ÙØ¸ Ø§Ù„Ø®ØµÙˆØµÙŠØ© ÙˆÙƒÙŠØ¹Ø·ÙŠ Ù…Ù† Ø§Ù„Ù„ÙˆÙ„ ÙÙƒØ±Ø© Ø¹Ù„Ù‰ Ø±ÙˆØ­ Ø§Ù„Ù…ÙƒØ§Ù†. Ø¬Ø§Ù…Ø¹ Ø¨ÙŠÙ† Ø§Ù„Ø¹ØµØ±ÙŠ ÙˆØ§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠ Ø¨Ø·Ø±ÙŠÙ‚Ø© Ù…ØªÙˆØ§Ø²Ù†Ø© ÙˆØ²ÙŠÙ†Ø©. Ù‡Ù†Ø§ ÙƒÙŠ ÙƒØªØ¯Ø®Ù„ Ù…Ù† Ø§Ù„Ø¨Ø§Ø¨ØŒ ÙƒØ£Ù†Ùƒ Ø¨Ø¯ÙŠØªÙŠ Ø­ÙƒØ§ÙŠØ© Ø¬Ø¯ÙŠØ¯Ø©."
+                },
+                "en": {
+                    "title": "Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹",
+                    "description": "ÙÙŠ Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹ØŒ Ù‡Ø§Ø¯ Ø§Ù„Ø¨Ø§Ø¨ Ø¯ Ø§Ù„ÙÙŠÙ„Ù‘Ø§ Ø¹Ù†Ø¯Ùˆ Ø­ÙƒØ§ÙŠØ© Ø®Ø§ØµØ© Ø¨ÙŠÙ‡. ØªØµØ§ÙˆØ¨ Ø¨Ø§Ù„Ø­Ø±ÙØ© Ù…Ù† Ø®Ø´Ø¨ Ù‚ÙˆÙŠ ÙˆÙ…Ø¹Ø§Ù‡ ØªÙØ§ØµÙŠÙ„ Ù…Ù† Ø­Ø¯ÙŠØ¯ Ù…Ø®Ø¯ÙˆÙ…ÙŠÙ† Ø¨Ø§Ù„Ø¯Ù‚Ø©ØŒ Ù…Ø³ØªÙˆØ­ÙŠ Ù…Ù† Ø§Ù„ØµÙ†Ø§Ø¹Ø© Ø§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠØ©. ÙƒÙ„ Ù†Ù‚Ø´Ø© ÙÙŠÙ‡ Ø®Ø¯Ù…Ø© ÙˆÙƒÙ„ Ø¯ÙˆØ±Ø© Ù…Ø¹Ù…ÙˆÙ„Ø© Ø¨Ø§Ù„ÙŠØ¯ØŒ Ø¨Ø§Ø´ ÙŠØ®Ø±Ø¬ Ø¨Ø§Ø¨ ÙØ±ÙŠØ¯ ÙˆÙ…Ø§ÙƒØ§ÙŠÙ†Ø´ ÙƒÙŠÙÙˆ.\n\nÙ…Ø§Ø´ÙŠ ØºÙŠØ± Ù…Ø¯Ø®Ù„ØŒ Ù‡Ø§Ø¯Ø§ Ø¨ØµØ­ Ù‡ÙˆÙŠØ© Ø§Ù„Ø¯Ø§Ø±. ÙƒÙŠØ­ÙØ¸ Ø§Ù„Ø®ØµÙˆØµÙŠØ© ÙˆÙƒÙŠØ¹Ø·ÙŠ Ù…Ù† Ø§Ù„Ù„ÙˆÙ„ ÙÙƒØ±Ø© Ø¹Ù„Ù‰ Ø±ÙˆØ­ Ø§Ù„Ù…ÙƒØ§Ù†. Ø¬Ø§Ù…Ø¹ Ø¨ÙŠÙ† Ø§Ù„Ø¹ØµØ±ÙŠ ÙˆØ§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠ Ø¨Ø·Ø±ÙŠÙ‚Ø© Ù…ØªÙˆØ§Ø²Ù†Ø© ÙˆØ²ÙŠÙ†Ø©. Ù‡Ù†Ø§ ÙƒÙŠ ÙƒØªØ¯Ø®Ù„ Ù…Ù† Ø§Ù„Ø¨Ø§Ø¨ØŒ ÙƒØ£Ù†Ùƒ Ø¨Ø¯ÙŠØªÙŠ Ø­ÙƒØ§ÙŠØ© Ø¬Ø¯ÙŠØ¯Ø©."
+                },
+                "ar": {
+                    "title": "Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹",
+                    "description": "ÙÙŠ Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹ØŒ Ù‡Ø§Ø¯ Ø§Ù„Ø¨Ø§Ø¨ Ø¯ Ø§Ù„ÙÙŠÙ„Ù‘Ø§ Ø¹Ù†Ø¯Ùˆ Ø­ÙƒØ§ÙŠØ© Ø®Ø§ØµØ© Ø¨ÙŠÙ‡. ØªØµØ§ÙˆØ¨ Ø¨Ø§Ù„Ø­Ø±ÙØ© Ù…Ù† Ø®Ø´Ø¨ Ù‚ÙˆÙŠ ÙˆÙ…Ø¹Ø§Ù‡ ØªÙØ§ØµÙŠÙ„ Ù…Ù† Ø­Ø¯ÙŠØ¯ Ù…Ø®Ø¯ÙˆÙ…ÙŠÙ† Ø¨Ø§Ù„Ø¯Ù‚Ø©ØŒ Ù…Ø³ØªÙˆØ­ÙŠ Ù…Ù† Ø§Ù„ØµÙ†Ø§Ø¹Ø© Ø§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠØ©. ÙƒÙ„ Ù†Ù‚Ø´Ø© ÙÙŠÙ‡ Ø®Ø¯Ù…Ø© ÙˆÙƒÙ„ Ø¯ÙˆØ±Ø© Ù…Ø¹Ù…ÙˆÙ„Ø© Ø¨Ø§Ù„ÙŠØ¯ØŒ Ø¨Ø§Ø´ ÙŠØ®Ø±Ø¬ Ø¨Ø§Ø¨ ÙØ±ÙŠØ¯ ÙˆÙ…Ø§ÙƒØ§ÙŠÙ†Ø´ ÙƒÙŠÙÙˆ.\n\nÙ…Ø§Ø´ÙŠ ØºÙŠØ± Ù…Ø¯Ø®Ù„ØŒ Ù‡Ø§Ø¯Ø§ Ø¨ØµØ­ Ù‡ÙˆÙŠØ© Ø§Ù„Ø¯Ø§Ø±. ÙƒÙŠØ­ÙØ¸ Ø§Ù„Ø®ØµÙˆØµÙŠØ© ÙˆÙƒÙŠØ¹Ø·ÙŠ Ù…Ù† Ø§Ù„Ù„ÙˆÙ„ ÙÙƒØ±Ø© Ø¹Ù„Ù‰ Ø±ÙˆØ­ Ø§Ù„Ù…ÙƒØ§Ù†. Ø¬Ø§Ù…Ø¹ Ø¨ÙŠÙ† Ø§Ù„Ø¹ØµØ±ÙŠ ÙˆØ§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠ Ø¨Ø·Ø±ÙŠÙ‚Ø© Ù…ØªÙˆØ§Ø²Ù†Ø© ÙˆØ²ÙŠÙ†Ø©. Ù‡Ù†Ø§ ÙƒÙŠ ÙƒØªØ¯Ø®Ù„ Ù…Ù† Ø§Ù„Ø¨Ø§Ø¨ØŒ ÙƒØ£Ù†Ùƒ Ø¨Ø¯ÙŠØªÙŠ Ø­ÙƒØ§ÙŠØ© Ø¬Ø¯ÙŠØ¯Ø©."
+                }
+            }
+        },
+        {
+            "id": "poi_1776117082770",
+            "position": {
+                "x": -251.55933693635822,
+                "y": -264.9734933434627,
+                "z": -340.91325525149335
+            },
+            "audio": "",
+            "poiType": "character",
+            "timeMode": "night",
+            "replicas": [
+                {
+                    "audio": "../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/expression/01_zahra_replique_01.mp3",
+                    "description": "La porte par laquelle te vient le vent, bouche-la et tu te reposeras. Â»\nCoupe la source du problÃ¨me Ã  la racine pour retrouver la paix.",
+                    "transcript": "Ø§Ù„Ø¨Ø§Ø¨ Ù„ÙŠ ÙŠØ¬ÙŠÙƒ Ù…Ù†Ùˆ Ø§Ù„Ø±ÙŠØ­ Ø³Ø¯Ùˆ Ùˆ Ø³ØªØ±ÙŠØ­\n"
+                }
+            ],
+            "_replicaIndex": 0,
+            "content": {
+                "fr": {
+                    "title": "Ø²ÙÙ‡Ø±Ø©",
+                    "description": "",
+                    "transcript": ""
+                },
+                "en": {
+                    "title": "Ø²ÙÙ‡Ø±Ø©",
+                    "description": "",
+                    "transcript": ""
+                },
+                "ar": {
+                    "title": "Ø²ÙÙ‡Ø±Ø©",
+                    "description": "",
+                    "transcript": ""
+                }
+            }
+        },
+        {
+            "id": "poi_1776117130315",
+            "position": {
+                "x": -251.55933693635822,
+                "y": -264.9734933434627,
+                "z": -340.91325525149335
+            },
+            "audio": "",
+            "poiType": "character",
+            "timeMode": "night",
+            "replicas": [
+                {
+                    "audio": "../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/expression/01_zahra_replique_01.mp3",
+                    "description": "La porte par laquelle te vient le vent, bouche-la et tu te reposeras. Â»\nCoupe la source du problÃ¨me Ã  la racine pour retrouver la paix.",
+                    "transcript": "Ø§Ù„Ø¨Ø§Ø¨ Ù„ÙŠ ÙŠØ¬ÙŠÙƒ Ù…Ù†Ùˆ Ø§Ù„Ø±ÙŠØ­ Ø³Ø¯Ùˆ Ùˆ Ø³ØªØ±ÙŠØ­\n"
+                },
+                {
+                    "audio": "../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/expression/01_zahra_replique_02.mp3",
+                    "description": "Celui que la chance trahit dit : \"La sorcellerie (le mauvais sort) m'a trahi.\n\nCelui qui manque de chance ou de compÃ©tence accuse le mauvais Å“il plutÃ´t que de se remettre en question.",
+                    "transcript": "Ù„ÙŠ Ø®Ø§Ù†Ùˆ Ø§Ù„Ø²Ù‡Ø± ÙŠÙ‚ÙˆÙ„ Ø§Ù„Ø³Ø­ÙˆØ± Ø¨ÙŠØ§\n"
+                }
+            ],
+            "_replicaIndex": 0,
+            "content": {
+                "fr": {
+                    "title": "Ø²ÙÙ‡Ø±Ø©",
+                    "description": "",
+                    "transcript": ""
+                },
+                "en": {
+                    "title": "Ø²ÙÙ‡Ø±Ø©",
+                    "description": "",
+                    "transcript": ""
+                },
+                "ar": {
+                    "title": "Ø²ÙÙ‡Ø±Ø©",
+                    "description": "",
+                    "transcript": ""
+                }
+            }
+        },
+        {
+            "id": "poi_1776117132170",
+            "position": {
+                "x": -251.55933693635822,
+                "y": -264.9734933434627,
+                "z": -340.91325525149335
+            },
+            "audio": "",
+            "poiType": "character",
+            "timeMode": "night",
+            "replicas": [
+                {
+                    "audio": "../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/expression/01_zahra_replique_01.mp3",
+                    "description": "La porte par laquelle te vient le vent, bouche-la et tu te reposeras. Â»\nCoupe la source du problÃ¨me Ã  la racine pour retrouver la paix.",
+                    "transcript": "Ø§Ù„Ø¨Ø§Ø¨ Ù„ÙŠ ÙŠØ¬ÙŠÙƒ Ù…Ù†Ùˆ Ø§Ù„Ø±ÙŠØ­ Ø³Ø¯Ùˆ Ùˆ Ø³ØªØ±ÙŠØ­\n"
+                },
+                {
+                    "audio": "../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/expression/01_zahra_replique_02.mp3",
+                    "description": "Celui que la chance trahit dit : \"La sorcellerie (le mauvais sort) m'a trahi.\n\nCelui qui manque de chance ou de compÃ©tence accuse le mauvais Å“il plutÃ´t que de se remettre en question.",
+                    "transcript": "Ù„ÙŠ Ø®Ø§Ù†Ùˆ Ø§Ù„Ø²Ù‡Ø± ÙŠÙ‚ÙˆÙ„ Ø§Ù„Ø³Ø­ÙˆØ± Ø¨ÙŠØ§\n"
+                }
+            ],
+            "_replicaIndex": 0,
+            "content": {
+                "fr": {
+                    "title": "Ø²ÙÙ‡Ø±Ø©",
+                    "description": "",
+                    "transcript": ""
+                },
+                "en": {
+                    "title": "Ø²ÙÙ‡Ø±Ø©",
+                    "description": "",
+                    "transcript": ""
+                },
+                "ar": {
+                    "title": "Ø²ÙÙ‡Ø±Ø©",
+                    "description": "",
+                    "transcript": ""
+                }
+            }
+        },
+        {
+            "id": "poi_1776117194706",
+            "position": {
+                "x": -121.33867479629063,
+                "y": -292.79912179175983,
+                "z": -386.4468992940637
+            },
+            "audio": "",
+            "poiType": "character",
+            "timeMode": "night",
+            "replicas": [
+                {
+                    "audio": "../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/expression/01_zahra_replique_02.mp3",
+                    "description": "C'est quelle chorba (soupe algÃ©rienne) qui t'a brÃ»lÃ© les lÃ¨vres ? \n\nPour quelle raison vous estimez-vous partie prenante de cette affaire ",
+                    "transcript": "ÙˆØ§Ø´ Ù…Ù† Ø´Ø±Ø¨Ø© Ø­Ø±Ù‚ØªÙ„Ùƒ Ø´ÙˆØ§Ø±Ø¨Ùƒ"
+                }
+            ],
+            "_replicaIndex": 0,
+            "content": {
+                "fr": {
+                    "title": "Ø¹Ø§Ø¦Ø´Ø©",
+                    "description": "",
+                    "transcript": ""
+                },
+                "en": {
+                    "title": "Ø¹Ø§Ø¦Ø´Ø©",
+                    "description": "",
+                    "transcript": ""
+                },
+                "ar": {
+                    "title": "Ø¹Ø§Ø¦Ø´Ø©",
+                    "description": "",
+                    "transcript": ""
+                }
+            }
+        },
+        {
+            "id": "poi_1776117348606",
+            "position": {
+                "x": -356.32605921840184,
+                "y": -350.3443533765454,
+                "z": 3.6971606671478394
+            },
+            "audio": "../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/narration/01_narration_fawara.mp3",
+            "poiType": "object",
+            "timeMode": "day",
+            "replicas": [],
+            "_replicaIndex": 0,
+            "content": {
+                "fr": {
+                    "title": "ÙÙˆØ§Ø±Ø©",
+                    "description": "La fwÄra est dÃ©crite comme le cÅ“ur battant de la maison, une fontaine en marbre et zellige qui apporte fraÃ®cheur et sÃ©rÃ©nitÃ©. Son murmure apaise l'esprit et rassemble la famille, symbolisant la noblesse et l'Ã©lÃ©gance des demeures d'autrefois.",
+                    "transcript": "ÙˆØ³Ø· Ø§Ù„Ø¯Ø§Ø±ØŒ ÙƒØ§ÙŠÙ† Ù‚Ù„Ø¨ ÙŠÙ†Ø¨Ø¶ Ø¨Ø§Ù„Ø­ÙŠØ§Ø©.. Ù‡ÙŠ Ø§Ù„ÙÙˆØ§Ø±Ø©.\n\nÙ…Ø­Ø·ÙˆØ·Ø© ØªÙ…Ø§ ÙÙŠ Ù†Øµ Ø§Ù„Ø¨Ø§ØªÙŠÙˆØŒ Ù…Ø²ÙŠÙ†Ø© Ø¨Ø§Ù„Ø²Ù„ÙŠØ¬ ÙˆØ§Ù„Ø±Ø®Ø§Ù…ØŒ ÙˆÙ…Ø³Ù‚ÙŠØ© Ø¨Ø§Ù„Ù‡ÙˆØ§ Ø§Ù„Ø¨Ø§Ø±Ø¯. ØµÙˆØª Ø§Ù„Ù…Ø§ Ø¯ÙŠØ§Ù„Ù‡Ø§ ÙŠØºÙ„Ø¨ Ø¹Ù„Ù‰ ÙƒÙ„Ø´ØŒ ÙŠØ¹Ø·ÙŠÙƒ Ø±Ø§Ø­Ø© Ø§Ù„Ø¨Ø§Ù„ ÙˆÙŠØ®Ù„ÙŠ Ø§Ù„Ù‚Ø¹Ø¯Ø© ÙˆØ³Ø· Ø§Ù„Ø¹ÙŠÙ„Ø© Ø¹Ù†Ø¯Ù‡Ø§ Ø¨Ù†Ø© Ø®Ø§ØµØ©.\n\nØ§Ù„ÙÙˆØ§Ø±Ø© Ù…Ø§Ø´ÙŠ ØºÙŠØ± Ø¯ÙŠÙƒÙˆØ±ØŒ Ù‡ÙŠ Ø±ÙˆØ­ Ø§Ù„Ø¯Ø§Ø± Ø§Ù„Ù„ÙŠ ØªØ¬Ù…Ø¹Ù†Ø§ ÙˆØªÙÙƒØ±Ù†Ø§ ÙÙŠ Ø²Ù…Ø§Ù† Ø§Ù„Ø®ÙŠØ± ÙˆØ§Ù„Ù‡Ù…Ø©."
+                },
+                "en": {
+                    "title": "ÙÙˆØ§Ø±Ø©",
+                    "description": "La fwÄra est dÃ©crite comme le cÅ“ur battant de la maison, une fontaine en marbre et zellige qui apporte fraÃ®cheur et sÃ©rÃ©nitÃ©. Son murmure apaise l'esprit et rassemble la famille, symbolisant la noblesse et l'Ã©lÃ©gance des demeures d'autrefois.",
+                    "transcript": "ÙˆØ³Ø· Ø§Ù„Ø¯Ø§Ø±ØŒ ÙƒØ§ÙŠÙ† Ù‚Ù„Ø¨ ÙŠÙ†Ø¨Ø¶ Ø¨Ø§Ù„Ø­ÙŠØ§Ø©.. Ù‡ÙŠ Ø§Ù„ÙÙˆØ§Ø±Ø©.\n\nÙ…Ø­Ø·ÙˆØ·Ø© ØªÙ…Ø§ ÙÙŠ Ù†Øµ Ø§Ù„Ø¨Ø§ØªÙŠÙˆØŒ Ù…Ø²ÙŠÙ†Ø© Ø¨Ø§Ù„Ø²Ù„ÙŠØ¬ ÙˆØ§Ù„Ø±Ø®Ø§Ù…ØŒ ÙˆÙ…Ø³Ù‚ÙŠØ© Ø¨Ø§Ù„Ù‡ÙˆØ§ Ø§Ù„Ø¨Ø§Ø±Ø¯. ØµÙˆØª Ø§Ù„Ù…Ø§ Ø¯ÙŠØ§Ù„Ù‡Ø§ ÙŠØºÙ„Ø¨ Ø¹Ù„Ù‰ ÙƒÙ„Ø´ØŒ ÙŠØ¹Ø·ÙŠÙƒ Ø±Ø§Ø­Ø© Ø§Ù„Ø¨Ø§Ù„ ÙˆÙŠØ®Ù„ÙŠ Ø§Ù„Ù‚Ø¹Ø¯Ø© ÙˆØ³Ø· Ø§Ù„Ø¹ÙŠÙ„Ø© Ø¹Ù†Ø¯Ù‡Ø§ Ø¨Ù†Ø© Ø®Ø§ØµØ©.\n\nØ§Ù„ÙÙˆØ§Ø±Ø© Ù…Ø§Ø´ÙŠ ØºÙŠØ± Ø¯ÙŠÙƒÙˆØ±ØŒ Ù‡ÙŠ Ø±ÙˆØ­ Ø§Ù„Ø¯Ø§Ø± Ø§Ù„Ù„ÙŠ ØªØ¬Ù…Ø¹Ù†Ø§ ÙˆØªÙÙƒØ±Ù†Ø§ ÙÙŠ Ø²Ù…Ø§Ù† Ø§Ù„Ø®ÙŠØ± ÙˆØ§Ù„Ù‡Ù…Ø©."
+                },
+                "ar": {
+                    "title": "ÙÙˆØ§Ø±Ø©",
+                    "description": "La fwÄra est dÃ©crite comme le cÅ“ur battant de la maison, une fontaine en marbre et zellige qui apporte fraÃ®cheur et sÃ©rÃ©nitÃ©. Son murmure apaise l'esprit et rassemble la famille, symbolisant la noblesse et l'Ã©lÃ©gance des demeures d'autrefois.",
+                    "transcript": "ÙˆØ³Ø· Ø§Ù„Ø¯Ø§Ø±ØŒ ÙƒØ§ÙŠÙ† Ù‚Ù„Ø¨ ÙŠÙ†Ø¨Ø¶ Ø¨Ø§Ù„Ø­ÙŠØ§Ø©.. Ù‡ÙŠ Ø§Ù„ÙÙˆØ§Ø±Ø©.\n\nÙ…Ø­Ø·ÙˆØ·Ø© ØªÙ…Ø§ ÙÙŠ Ù†Øµ Ø§Ù„Ø¨Ø§ØªÙŠÙˆØŒ Ù…Ø²ÙŠÙ†Ø© Ø¨Ø§Ù„Ø²Ù„ÙŠØ¬ ÙˆØ§Ù„Ø±Ø®Ø§Ù…ØŒ ÙˆÙ…Ø³Ù‚ÙŠØ© Ø¨Ø§Ù„Ù‡ÙˆØ§ Ø§Ù„Ø¨Ø§Ø±Ø¯. ØµÙˆØª Ø§Ù„Ù…Ø§ Ø¯ÙŠØ§Ù„Ù‡Ø§ ÙŠØºÙ„Ø¨ Ø¹Ù„Ù‰ ÙƒÙ„Ø´ØŒ ÙŠØ¹Ø·ÙŠÙƒ Ø±Ø§Ø­Ø© Ø§Ù„Ø¨Ø§Ù„ ÙˆÙŠØ®Ù„ÙŠ Ø§Ù„Ù‚Ø¹Ø¯Ø© ÙˆØ³Ø· Ø§Ù„Ø¹ÙŠÙ„Ø© Ø¹Ù†Ø¯Ù‡Ø§ Ø¨Ù†Ø© Ø®Ø§ØµØ©.\n\nØ§Ù„ÙÙˆØ§Ø±Ø© Ù…Ø§Ø´ÙŠ ØºÙŠØ± Ø¯ÙŠÙƒÙˆØ±ØŒ Ù‡ÙŠ Ø±ÙˆØ­ Ø§Ù„Ø¯Ø§Ø± Ø§Ù„Ù„ÙŠ ØªØ¬Ù…Ø¹Ù†Ø§ ÙˆØªÙÙƒØ±Ù†Ø§ ÙÙŠ Ø²Ù…Ø§Ù† Ø§Ù„Ø®ÙŠØ± ÙˆØ§Ù„Ù‡Ù…Ø©."
+                }
+            }
+        },
+        {
+            "id": "poi_1776117416458",
+            "position": {
+                "x": 68.96572020023638,
+                "y": -84.49111644796352,
+                "z": -487.1299002542149
+            },
+            "audio": "../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/narration/01_narration.mp3",
+            "poiType": "object",
+            "timeMode": "day",
+            "replicas": [],
+            "_replicaIndex": 0,
+            "content": {
+                "fr": {
+                    "title": "Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹",
+                    "description": "Cette porte de villa Ã  AÃ¯n SebaÃ¢ est dÃ©crite comme une piÃ¨ce unique, forgÃ©e par l'artisanat traditionnel Ã  partir de bois robuste et de fer forgÃ© prÃ©cis. Plus qu'une simple entrÃ©e, elle reprÃ©sente l'identitÃ© et l'Ã¢me de la maison, mÃªlant modernitÃ© et tradition pour offrir une promesse d'intimitÃ© et le dÃ©but d'une nouvelle histoire Ã  quiconque la franchit.",
+                    "transcript": "ÙÙŠ Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹ØŒ Ù‡Ø§Ø¯ Ø§Ù„Ø¨Ø§Ø¨ Ø¯ Ø§Ù„ÙÙŠÙ„Ù‘Ø§ Ø¹Ù†Ø¯Ùˆ Ø­ÙƒØ§ÙŠØ© Ø®Ø§ØµØ© Ø¨ÙŠÙ‡. ØªØµØ§ÙˆØ¨ Ø¨Ø§Ù„Ø­Ø±ÙØ© Ù…Ù† Ø®Ø´Ø¨ Ù‚ÙˆÙŠ ÙˆÙ…Ø¹Ø§Ù‡ ØªÙØ§ØµÙŠÙ„ Ù…Ù† Ø­Ø¯ÙŠØ¯ Ù…Ø®Ø¯ÙˆÙ…ÙŠÙ† Ø¨Ø§Ù„Ø¯Ù‚Ø©ØŒ Ù…Ø³ØªÙˆØ­ÙŠ Ù…Ù† Ø§Ù„ØµÙ†Ø§Ø¹Ø© Ø§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠØ©. ÙƒÙ„ Ù†Ù‚Ø´Ø© ÙÙŠÙ‡ Ø®Ø¯Ù…Ø© ÙˆÙƒÙ„ Ø¯ÙˆØ±Ø© Ù…Ø¹Ù…ÙˆÙ„Ø© Ø¨Ø§Ù„ÙŠØ¯ØŒ Ø¨Ø§Ø´ ÙŠØ®Ø±Ø¬ Ø¨Ø§Ø¨ ÙØ±ÙŠØ¯ ÙˆÙ…Ø§ÙƒØ§ÙŠÙ†Ø´ ÙƒÙŠÙÙˆ.\n\nÙ…Ø§Ø´ÙŠ ØºÙŠØ± Ù…Ø¯Ø®Ù„ØŒ Ù‡Ø§Ø¯Ø§ Ø¨ØµØ­ Ù‡ÙˆÙŠØ© Ø§Ù„Ø¯Ø§Ø±. ÙƒÙŠØ­ÙØ¸ Ø§Ù„Ø®ØµÙˆØµÙŠØ© ÙˆÙƒÙŠØ¹Ø·ÙŠ Ù…Ù† Ø§Ù„Ù„ÙˆÙ„ ÙÙƒØ±Ø© Ø¹Ù„Ù‰ Ø±ÙˆØ­ Ø§Ù„Ù…ÙƒØ§Ù†. Ø¬Ø§Ù…Ø¹ Ø¨ÙŠÙ† Ø§Ù„Ø¹ØµØ±ÙŠ ÙˆØ§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠ Ø¨Ø·Ø±ÙŠÙ‚Ø© Ù…ØªÙˆØ§Ø²Ù†Ø© ÙˆØ²ÙŠÙ†Ø©. Ù‡Ù†Ø§ ÙƒÙŠ ÙƒØªØ¯Ø®Ù„ Ù…Ù† Ø§Ù„Ø¨Ø§Ø¨ØŒ ÙƒØ£Ù†Ùƒ Ø¨Ø¯ÙŠØªÙŠ Ø­ÙƒØ§ÙŠØ© Ø¬Ø¯ÙŠØ¯Ø©."
+                },
+                "en": {
+                    "title": "Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹",
+                    "description": "Cette porte de villa Ã  AÃ¯n SebaÃ¢ est dÃ©crite comme une piÃ¨ce unique, forgÃ©e par l'artisanat traditionnel Ã  partir de bois robuste et de fer forgÃ© prÃ©cis. Plus qu'une simple entrÃ©e, elle reprÃ©sente l'identitÃ© et l'Ã¢me de la maison, mÃªlant modernitÃ© et tradition pour offrir une promesse d'intimitÃ© et le dÃ©but d'une nouvelle histoire Ã  quiconque la franchit.",
+                    "transcript": "ÙÙŠ Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹ØŒ Ù‡Ø§Ø¯ Ø§Ù„Ø¨Ø§Ø¨ Ø¯ Ø§Ù„ÙÙŠÙ„Ù‘Ø§ Ø¹Ù†Ø¯Ùˆ Ø­ÙƒØ§ÙŠØ© Ø®Ø§ØµØ© Ø¨ÙŠÙ‡. ØªØµØ§ÙˆØ¨ Ø¨Ø§Ù„Ø­Ø±ÙØ© Ù…Ù† Ø®Ø´Ø¨ Ù‚ÙˆÙŠ ÙˆÙ…Ø¹Ø§Ù‡ ØªÙØ§ØµÙŠÙ„ Ù…Ù† Ø­Ø¯ÙŠØ¯ Ù…Ø®Ø¯ÙˆÙ…ÙŠÙ† Ø¨Ø§Ù„Ø¯Ù‚Ø©ØŒ Ù…Ø³ØªÙˆØ­ÙŠ Ù…Ù† Ø§Ù„ØµÙ†Ø§Ø¹Ø© Ø§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠØ©. ÙƒÙ„ Ù†Ù‚Ø´Ø© ÙÙŠÙ‡ Ø®Ø¯Ù…Ø© ÙˆÙƒÙ„ Ø¯ÙˆØ±Ø© Ù…Ø¹Ù…ÙˆÙ„Ø© Ø¨Ø§Ù„ÙŠØ¯ØŒ Ø¨Ø§Ø´ ÙŠØ®Ø±Ø¬ Ø¨Ø§Ø¨ ÙØ±ÙŠØ¯ ÙˆÙ…Ø§ÙƒØ§ÙŠÙ†Ø´ ÙƒÙŠÙÙˆ.\n\nÙ…Ø§Ø´ÙŠ ØºÙŠØ± Ù…Ø¯Ø®Ù„ØŒ Ù‡Ø§Ø¯Ø§ Ø¨ØµØ­ Ù‡ÙˆÙŠØ© Ø§Ù„Ø¯Ø§Ø±. ÙƒÙŠØ­ÙØ¸ Ø§Ù„Ø®ØµÙˆØµÙŠØ© ÙˆÙƒÙŠØ¹Ø·ÙŠ Ù…Ù† Ø§Ù„Ù„ÙˆÙ„ ÙÙƒØ±Ø© Ø¹Ù„Ù‰ Ø±ÙˆØ­ Ø§Ù„Ù…ÙƒØ§Ù†. Ø¬Ø§Ù…Ø¹ Ø¨ÙŠÙ† Ø§Ù„Ø¹ØµØ±ÙŠ ÙˆØ§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠ Ø¨Ø·Ø±ÙŠÙ‚Ø© Ù…ØªÙˆØ§Ø²Ù†Ø© ÙˆØ²ÙŠÙ†Ø©. Ù‡Ù†Ø§ ÙƒÙŠ ÙƒØªØ¯Ø®Ù„ Ù…Ù† Ø§Ù„Ø¨Ø§Ø¨ØŒ ÙƒØ£Ù†Ùƒ Ø¨Ø¯ÙŠØªÙŠ Ø­ÙƒØ§ÙŠØ© Ø¬Ø¯ÙŠØ¯Ø©."
+                },
+                "ar": {
+                    "title": "Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹",
+                    "description": "Cette porte de villa Ã  AÃ¯n SebaÃ¢ est dÃ©crite comme une piÃ¨ce unique, forgÃ©e par l'artisanat traditionnel Ã  partir de bois robuste et de fer forgÃ© prÃ©cis. Plus qu'une simple entrÃ©e, elle reprÃ©sente l'identitÃ© et l'Ã¢me de la maison, mÃªlant modernitÃ© et tradition pour offrir une promesse d'intimitÃ© et le dÃ©but d'une nouvelle histoire Ã  quiconque la franchit.",
+                    "transcript": "ÙÙŠ Ø¹ÙŠÙ† Ø§Ù„Ø³Ø¨Ø¹ØŒ Ù‡Ø§Ø¯ Ø§Ù„Ø¨Ø§Ø¨ Ø¯ Ø§Ù„ÙÙŠÙ„Ù‘Ø§ Ø¹Ù†Ø¯Ùˆ Ø­ÙƒØ§ÙŠØ© Ø®Ø§ØµØ© Ø¨ÙŠÙ‡. ØªØµØ§ÙˆØ¨ Ø¨Ø§Ù„Ø­Ø±ÙØ© Ù…Ù† Ø®Ø´Ø¨ Ù‚ÙˆÙŠ ÙˆÙ…Ø¹Ø§Ù‡ ØªÙØ§ØµÙŠÙ„ Ù…Ù† Ø­Ø¯ÙŠØ¯ Ù…Ø®Ø¯ÙˆÙ…ÙŠÙ† Ø¨Ø§Ù„Ø¯Ù‚Ø©ØŒ Ù…Ø³ØªÙˆØ­ÙŠ Ù…Ù† Ø§Ù„ØµÙ†Ø§Ø¹Ø© Ø§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠØ©. ÙƒÙ„ Ù†Ù‚Ø´Ø© ÙÙŠÙ‡ Ø®Ø¯Ù…Ø© ÙˆÙƒÙ„ Ø¯ÙˆØ±Ø© Ù…Ø¹Ù…ÙˆÙ„Ø© Ø¨Ø§Ù„ÙŠØ¯ØŒ Ø¨Ø§Ø´ ÙŠØ®Ø±Ø¬ Ø¨Ø§Ø¨ ÙØ±ÙŠØ¯ ÙˆÙ…Ø§ÙƒØ§ÙŠÙ†Ø´ ÙƒÙŠÙÙˆ.\n\nÙ…Ø§Ø´ÙŠ ØºÙŠØ± Ù…Ø¯Ø®Ù„ØŒ Ù‡Ø§Ø¯Ø§ Ø¨ØµØ­ Ù‡ÙˆÙŠØ© Ø§Ù„Ø¯Ø§Ø±. ÙƒÙŠØ­ÙØ¸ Ø§Ù„Ø®ØµÙˆØµÙŠØ© ÙˆÙƒÙŠØ¹Ø·ÙŠ Ù…Ù† Ø§Ù„Ù„ÙˆÙ„ ÙÙƒØ±Ø© Ø¹Ù„Ù‰ Ø±ÙˆØ­ Ø§Ù„Ù…ÙƒØ§Ù†. Ø¬Ø§Ù…Ø¹ Ø¨ÙŠÙ† Ø§Ù„Ø¹ØµØ±ÙŠ ÙˆØ§Ù„ØªÙ‚Ù„ÙŠØ¯ÙŠ Ø¨Ø·Ø±ÙŠÙ‚Ø© Ù…ØªÙˆØ§Ø²Ù†Ø© ÙˆØ²ÙŠÙ†Ø©. Ù‡Ù†Ø§ ÙƒÙŠ ÙƒØªØ¯Ø®Ù„ Ù…Ù† Ø§Ù„Ø¨Ø§Ø¨ØŒ ÙƒØ£Ù†Ùƒ Ø¨Ø¯ÙŠØªÙŠ Ø­ÙƒØ§ÙŠØ© Ø¬Ø¯ÙŠØ¯Ø©."
+                }
+            }
+        }
+    ]
+}

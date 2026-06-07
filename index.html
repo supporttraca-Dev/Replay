@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>REPLAY — Architecture Jouable de la Mémoire</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="src/css/base.css">
+    <link rel="stylesheet" href="src/css/onboarding.css">
+    <link rel="icon" type="image/webp" href="assets/levels/level_01_casbah/global/ui/logo_traca.webp">
+    <!-- Scanner QR Code en temps réel (nécessite HTTPS) -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+
+    <main class="onboarding-container">
+        
+        <!-- ÉCRAN 1 : Accueil / Manifeste -->
+        <div id="screen-welcome" class="step-screen active">
+            <img src="assets/levels/level_01_casbah/global/ui/logo_traca.webp" alt="Logo TRACA" style="width: 70px; margin-bottom: 3rem; opacity: 0.7; filter: drop-shadow(0 0 20px rgba(200,169,110,0.3));">
+            <h1 class="title">REPLAY</h1>
+            <p class="subtitle">
+                Ceci n'est pas une exposition.<br>
+                Vous vous apprêtez à traverser une architecture jouable de la mémoire.
+            </p>
+            
+            <div class="ornament">
+                <div class="ornament-line"></div>
+                <span class="ornament-icon">✦</span>
+                <div class="ornament-line"></div>
+            </div>
+            
+            <button class="btn-primary" onclick="app.startExperience()">Commencer</button>
+        </div>
+
+        <!-- ÉCRAN 2 : Identité & Sélection du Profil -->
+        <div id="screen-profile" class="step-screen">
+            <h1 class="title" style="font-size: 2.2rem;">Votre Identité</h1>
+            <p class="subtitle" style="margin-bottom: 2rem;">Comment la mémoire doit-elle vous appeler ?</p>
+            
+            <div class="input-group">
+                <input type="text" id="visitor-name" class="name-input" placeholder="Prénom..." autocomplete="off">
+            </div>
+
+            <div class="character-grid">
+                <div class="character-card" onclick="app.selectCharacter('archaeologist', this)">
+                    <span class="char-icon">🏺</span>
+                    <div class="char-name">L'Archéologue</div>
+                    <div class="char-desc">Cherche les faits</div>
+                </div>
+                <div class="character-card selected" onclick="app.selectCharacter('passerby', this)">
+                    <span class="char-icon">🚶</span>
+                    <div class="char-name">Le Passant</div>
+                    <div class="char-desc">Se laisse guider</div>
+                </div>
+                <div class="character-card" onclick="app.selectCharacter('witness', this)">
+                    <span class="char-icon">👁️</span>
+                    <div class="char-name">Le Témoin</div>
+                    <div class="char-desc">Observe en silence</div>
+                </div>
+            </div>
+            
+            <div id="creation-loader" style="display:none; flex-direction:column; align-items:center; margin-top: 1rem;">
+                <div class="loader-spinner"></div>
+                <span style="font-family: var(--font-body); font-size: 1.2rem; color: var(--gold-muted); font-style: italic;">Création du passeport temporel...</span>
+            </div>
+
+            <button id="btn-create-session" class="btn-primary" onclick="app.createSession()">Créer ma session</button>
+        </div>
+
+        <!-- ÉCRAN 3 : Alerte Écouteurs -->
+        <div id="screen-headphones" class="step-screen">
+            <div class="headphones-icon">🎧</div>
+            <h1 class="title" style="font-size: 2.2rem; margin-bottom: 1.5rem;">Immersion Audio</h1>
+            <p class="subtitle" style="max-width: 500px; margin-bottom: 4rem;">
+                REPLAY est une expérience viscérale et sonore.<br>
+                Branchez vos écouteurs maintenant pour entendre les voix du passé.
+            </p>
+            <button class="btn-primary" onclick="app.goToScreen('screen-map-tuto')">C'est fait</button>
+        </div>
+
+        <!-- ÉCRAN 4 : Tuto de la Map -->
+        <div id="screen-map-tuto" class="step-screen">
+            <h1 class="title" style="font-size: 2.2rem; margin-bottom: 1.5rem;">La Carte Physique</h1>
+            
+            <p class="subtitle" style="max-width: 600px; margin-bottom: 4rem;">
+                Vous trouverez une carte papier dans ce bâtiment.<br><br>
+                Cette interface numérique vous guidera vers les 10 lieux. Scannez les symboles cachés dans chaque pièce pour réveiller la mémoire.<br><br>
+                <span style="color: var(--gold-muted); font-size: 0.9em; font-style: italic;">Note : Le bouton 'Scanner' apparaîtra avant chaque exploration, et réapparaîtra à la fin de chaque lieu pour continuer votre quête.</span>
+            </p>
+
+            <button class="btn-primary" onclick="app.goToScreen('screen-map')" style="background: rgba(200, 169, 110, 0.1); border-color: #c8a96e; box-shadow: 0 0 30px rgba(200,169,110,0.15);">
+                Ouvrir ma Carte
+            </button>
+        </div>
+
+        <!-- ÉCRAN 5 : La Carte -->
+        <div id="screen-map" class="step-screen">
+            <h1 class="title" style="font-size: 2.2rem; margin-bottom: 1.5rem;">Exploration</h1>
+            <p class="subtitle" style="margin-bottom: 2rem;">Lieu 1 : La Casbah (En attente...)</p>
+            
+            <div style="width: 200px; height: 200px; border-radius: 50%; border: 2px dashed rgba(200,169,110,0.5); display:flex; align-items:center; justify-content:center; margin-bottom: 3rem; animation: pulse-logo 2s infinite;">
+                <span style="font-size: 3rem; opacity: 0.5;">📍</span>
+            </div>
+
+            <button class="btn-primary" onclick="app.openScanner()">Scanner le premier lieu</button>
+        </div>
+
+        <!-- ÉCRAN 6 : Scanner en temps réel -->
+        <div id="screen-scanner" class="step-screen">
+            <h1 class="title" style="font-size: 1.5rem; margin-bottom: 1rem;">Scanner le QR Code</h1>
+
+            <!-- Fenêtre de la caméra -->
+            <div id="reader" style="
+                width: 100%;
+                max-width: 320px;
+                border-radius: 16px;
+                overflow: hidden;
+                margin-bottom: 1.5rem;
+                border: 1px solid rgba(200,169,110,0.4);
+                background: #000;
+                min-height: 240px;
+            "></div>
+
+            <div id="scan-feedback" style="min-height: 40px; text-align: center; color: var(--gold-muted); font-size: 0.85em; margin-bottom: 1.5rem;"></div>
+
+            <button class="btn-primary" style="background: transparent; border-color: rgba(255,255,255,0.2);" onclick="app.closeScanner()">Annuler</button>
+        </div>
+
+    </main>
+
+    <!-- App Logic -->
+    <script type="module">
+        import { syncManager } from './src/js/core/db/syncManager.js';
+
+        window.app = {
+            selectedCharacter: 'passerby',
+            audioUnlocked: false,
+
+            goToScreen: function(screenId) {
+                const currentScreen = document.querySelector('.step-screen.active');
+                if (currentScreen) {
+                    currentScreen.style.animation = 'none'; // reset
+                    currentScreen.style.opacity = 0;
+                    setTimeout(() => {
+                        currentScreen.classList.remove('active');
+                        const nextScreen = document.getElementById(screenId);
+                        nextScreen.classList.add('active');
+                    }, 400); // Wait for fade out
+                } else {
+                    document.getElementById(screenId).classList.add('active');
+                }
+            },
+
+            // ÉCRAN 1 : Déblocage de l'Audio
+            startExperience: function() {
+                this.unlockAudio();
+                this.goToScreen('screen-profile');
+            },
+
+            unlockAudio: function() {
+                if (this.audioUnlocked) return;
+                
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContext) return;
+                    
+                    const ctx = new AudioContext();
+                    // Génère un buffer vide de 1 frame
+                    const buffer = ctx.createBuffer(1, 1, 22050);
+                    const source = ctx.createBufferSource();
+                    source.buffer = buffer;
+                    source.connect(ctx.destination);
+                    
+                    if (ctx.state === 'suspended') {
+                        ctx.resume();
+                    }
+                    source.start(0);
+                    this.audioUnlocked = true;
+                    console.log("[Audio] Contexte audio iOS/Safari débloqué de force !");
+                } catch(e) {
+                    console.warn("Impossible de débloquer l'audio", e);
+                }
+            },
+
+            // ÉCRAN 2 : Choix du personnage
+            selectCharacter: function(type, element) {
+                this.selectedCharacter = type;
+                document.querySelectorAll('.character-card').forEach(c => c.classList.remove('selected'));
+                element.classList.add('selected');
+            },
+
+            // ÉCRAN 2 -> 3 : Création de la Session (Supabase + IndexedDB)
+            createSession: async function() {
+                const nameInput = document.getElementById('visitor-name').value.trim();
+                const btn = document.getElementById('btn-create-session');
+                const loader = document.getElementById('creation-loader');
+
+                if (!nameInput) {
+                    // Feedback visuel elegant si vide
+                    document.getElementById('visitor-name').style.borderBottomColor = 'red';
+                    document.getElementById('visitor-name').style.transform = 'translateX(-10px)';
+                    setTimeout(() => document.getElementById('visitor-name').style.transform = 'translateX(10px)', 100);
+                    setTimeout(() => document.getElementById('visitor-name').style.transform = 'translateX(0)', 200);
+                    setTimeout(() => document.getElementById('visitor-name').style.borderBottomColor = 'var(--gold-muted)', 1000);
+                    return;
+                }
+
+                btn.style.display = 'none';
+                loader.style.display = 'flex';
+
+                try {
+                    // Création réelle en base de données !
+                    const session = await syncManager.startNewSession(nameInput, this.selectedCharacter);
+                    console.log("[Session] Session créée :", session);
+                    
+                    this.goToScreen('screen-headphones');
+                } catch (error) {
+                    console.error("Erreur de session:", error);
+                    alert("Erreur de connexion avec la base de données. Assurez-vous d'avoir bien exécuté le code SQL sur Supabase !");
+                    btn.style.display = 'block';
+                    loader.style.display = 'none';
+                }
+            },
+
+            // Lancement du jeu
+            launchExperience: function() {
+                window.location.href = "experiences/casbah/index.html";
+            },
+
+            // ────────────────────────────────────────────────────────
+            // SCANNER QR-CODE — Caméra en temps réel (HTTPS requis)
+            // ────────────────────────────────────────────────────────
+            html5QrCode: null,
+
+            openScanner: function() {
+                this.goToScreen('screen-scanner');
+                document.getElementById('scan-feedback').textContent = 'Pointez la caméra vers le QR Code...';
+
+                setTimeout(() => {
+                    if (!this.html5QrCode) {
+                        this.html5QrCode = new Html5Qrcode('reader');
+                    }
+
+                    this.html5QrCode.start(
+                        { facingMode: 'environment' },
+                        { fps: 10, qrbox: { width: 220, height: 220 } },
+                        (decodedText) => {
+                            // ✅ QR Code détecté automatiquement !
+                            document.getElementById('scan-feedback').textContent = '✅ Code détecté ! Chargement...';
+                            this.html5QrCode.stop().then(() => {
+                                window.location.href = 'experiences/casbah/index.html?direct=true';
+                            }).catch(() => {
+                                window.location.href = 'experiences/casbah/index.html?direct=true';
+                            });
+                        },
+                        () => { /* erreurs de scan en continu, ignorées */ }
+                    ).catch((err) => {
+                        console.error('[Scanner] Erreur caméra :', err);
+                        document.getElementById('scan-feedback').innerHTML =
+                            '❌ Caméra inaccessible.<br><small>Assurez-vous d\'autoriser la caméra dans Safari → Paramètres.</small>';
+                    });
+                }, 400);
+            },
+
+            closeScanner: function() {
+                if (this.html5QrCode) {
+                    this.html5QrCode.stop().catch(() => {});
+                }
+                document.getElementById('scan-feedback').textContent = '';
+                this.goToScreen('screen-map');
+            },
+        };
+
+        // Gérer 'Entrée' sur l'input pour valider rapidement
+        document.getElementById('visitor-name').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                window.app.createSession();
+            }
+        });
+
+        // Auto-open scanner si on vient d'un "Scan & Go" (Lieu terminé)
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('scanner') === 'true') {
+                // Bypass onboarding et va direct au scanner
+                window.app.audioUnlocked = true; // On assume que l'audio était déjà actif
+                window.app.openScanner();
+            }
+        });
+    </script>
+</body>
+</html>
