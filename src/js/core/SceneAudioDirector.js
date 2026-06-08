@@ -52,6 +52,7 @@ export class SceneAudioDirector {
         const src = this._resolveAmbience(nodeData, isNight);
         this._expectedAmbience = src;
         console.info(`[SceneAudioDirector] → "${nodeId}" | ${isNight ? '🌙 Nuit' : '☀️ Jour'} | ${src.split('/').pop()}`);
+        this._applySceneMix(nodeId);
         this.audio.forcePlayAmbience(src, fadeDuration);
         this._preloadNeighbors(nodeId);
         this._refreshMixer();
@@ -67,6 +68,7 @@ export class SceneAudioDirector {
         const src = this._resolveAmbience(nodeData, isNight);
         this._expectedAmbience = src;
         console.info(`[SceneAudioDirector] ⏰ TT → ${isNight ? '🌙' : '☀️'} | ${src.split('/').pop()}`);
+        this._applySceneMix(this._currentNodeId);
         this.audio.forcePlayAmbience(src, fadeDuration);
         this._refreshMixer();
     }
@@ -98,6 +100,27 @@ export class SceneAudioDirector {
                     this.audio.preloadSingle(p);
                 });
             });
+    }
+
+    // ── Application des mixes (issus de l'export JSON) ────────────────────────
+    
+    _applySceneMix(nodeId) {
+        const mixes = {
+            patio:    { music: 0.10, ambience: 0.21 },
+            basement: { music: 0.10, ambience: 0.77 },
+            room:     { music: 0.06, ambience: 0.16 },
+            upstairs: { music: 0.16, ambience: 0.13 }
+        };
+        
+        const mix = mixes[nodeId];
+        if (mix) {
+            this.audio.setVolume('music', mix.music);
+            this.audio.setVolume('ambience', mix.ambience);
+        } else {
+            // Valeurs par défaut si scène inconnue
+            this.audio.setVolume('music', 0.10);
+            this.audio.setVolume('ambience', 0.35);
+        }
     }
 
     // ── Mixer UI ──────────────────────────────────────────────────────────────
