@@ -262,10 +262,10 @@ export const CASBAH_SCENARIO = {
             },
             startCam: { az: 3.14, pol: 1.57 },
             pois: [
-                // --- POI NAVIGATION RETOUR A LA MAISON ---
+                // --- RETOUR À LA MAISON ---
                 {
                     id: 'nav_hub_to_patio',
-                    position: { x: 0, y: 0, z: -400 }, // Position temporaire
+                    position: { x: 0, y: 0, z: -400 },
                     audio: '',
                     poiType: 'navigation',
                     targetNode: 'patio',
@@ -274,6 +274,118 @@ export const CASBAH_SCENARIO = {
                         fr: { title: 'Entrer dans la maison', description: 'Retourner dans le patio.', transcript: '' },
                         en: { title: 'Enter the house', description: 'Return to the patio.', transcript: '' },
                         ar: { title: 'دخول المنزل', description: 'العودة إلى الفناء.', transcript: '' }
+                    }
+                },
+                // --- VERS LA PORTE (RUE) ---
+                {
+                    id: 'nav_hub_to_rue_porte',
+                    position: { x: -233.44, y: -323.80, z: -25.70 },
+                    audio: '',
+                    poiType: 'navigation',
+                    targetNode: 'rue_porte',
+                    timeMode: 'day',
+                    content: {
+                        fr: { title: 'Vers la porte', description: 'Explorer la rue près de la porte.', transcript: '' },
+                        en: { title: 'Towards the door', description: 'Explore the street near the door.', transcript: '' },
+                        ar: { title: 'نحو الباب', description: 'استكشاف الشارع بالقرب من الباب.', transcript: '' }
+                    }
+                },
+                // --- VERS LES HAUTEURS DE LA CASBAH ---
+                {
+                    id: 'nav_hub_to_hauteurs',
+                    position: { x: 88, y: -182, z: 456 },
+                    audio: '',
+                    poiType: 'navigation',
+                    targetNode: 'hauteurs',
+                    timeMode: 'day',
+                    content: {
+                        fr: { title: 'Les hauteurs', description: 'Monter vers les hauteurs de la Casbah.', transcript: '' },
+                        en: { title: 'The heights', description: 'Climb towards the Casbah heights.', transcript: '' },
+                        ar: { title: 'المرتفعات', description: 'الصعود نحو مرتفعات القصبة.', transcript: '' }
+                    }
+                },
+                // --- VERS LE MARCHÉ ---
+                {
+                    id: 'nav_hub_to_marche',
+                    position: { x: 75.48, y: -237.20, z: -313.11 },
+                    audio: '',
+                    poiType: 'navigation',
+                    targetNode: 'marche',
+                    timeMode: 'day',
+                    content: {
+                        fr: { title: 'Le marché', description: 'Se diriger vers le marché.', transcript: '' },
+                        en: { title: 'The market', description: 'Head towards the market.', transcript: '' },
+                        ar: { title: 'السوق', description: 'التوجه نحو السوق.', transcript: '' }
+                    }
+                }
+            ]
+        },
+        // ── PLACEHOLDER NODES (Level 2 – à compléter) ─────────────────────────
+        'rue_porte': {
+            backgrounds: {
+                day: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant%20la%20porte/background/01_bg.png',
+                night: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant%20la%20porte/background/01_bg.png'
+            },
+            ambience: { day: null, night: null },
+            startCam: { az: 0, pol: 1.57 },
+            pois: [
+                {
+                    id: 'nav_rue_porte_back',
+                    position: { x: 0, y: 0, z: -400 },
+                    audio: '',
+                    poiType: 'navigation',
+                    targetNode: 'hub_rue',
+                    timeMode: 'day',
+                    content: {
+                        fr: { title: 'Retour au hub', description: '', transcript: '' },
+                        en: { title: 'Back to hub', description: '', transcript: '' },
+                        ar: { title: 'العودة', description: '', transcript: '' }
+                    }
+                }
+            ]
+        },
+        'hauteurs': {
+            backgrounds: {
+                day: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant%20la%20porte/background/01_bg.png',
+                night: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant%20la%20porte/background/01_bg.png'
+            },
+            ambience: { day: null, night: null },
+            startCam: { az: 0, pol: 1.57 },
+            pois: [
+                {
+                    id: 'nav_hauteurs_back',
+                    position: { x: 0, y: 0, z: -400 },
+                    audio: '',
+                    poiType: 'navigation',
+                    targetNode: 'hub_rue',
+                    timeMode: 'day',
+                    content: {
+                        fr: { title: 'Retour au hub', description: '', transcript: '' },
+                        en: { title: 'Back to hub', description: '', transcript: '' },
+                        ar: { title: 'العودة', description: '', transcript: '' }
+                    }
+                }
+            ]
+        },
+        'marche': {
+            backgrounds: {
+                day: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant%20la%20porte/background/01_bg.png',
+                night: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant%20la%20porte/background/01_bg.png'
+            },
+            ambience: { day: null, night: null },
+            startCam: { az: 0, pol: 1.57 },
+            pois: [
+                {
+                    id: 'nav_marche_back',
+                    position: { x: 0, y: 0, z: -400 },
+                    audio: '',
+                    poiType: 'navigation',
+                    targetNode: 'hub_rue',
+                    timeMode: 'day',
+                    content: {
+                        fr: { title: 'Retour au hub', description: '', transcript: '' },
+                        en: { title: 'Back to hub', description: '', transcript: '' },
+                        ar: { title: 'العودة', description: '', transcript: '' }
                     }
                 }
             ]

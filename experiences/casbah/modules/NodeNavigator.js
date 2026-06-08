@@ -41,6 +41,18 @@ const ARROW_CONFIGS = {
     'patio->hub_rue': {
         position: { x: -191.99, y: -182.70, z: 299.60 },
         rotation: [-1.57, 0, -2.95]
+    },
+    'hub_rue->rue_porte': {
+        position: { x: -233.44, y: -323.80, z: -25.70 },
+        rotation: [-1.57, 0, -4.90]
+    },
+    'hub_rue->hauteurs': {
+        position: { x: 88, y: -182, z: 456 },
+        rotation: [-1.57, 0, -9.25]
+    },
+    'hub_rue->marche': {
+        position: { x: 75.48, y: -237.20, z: -313.11 },
+        rotation: [-1.57, 0, -6.60]
     }
 };
 
