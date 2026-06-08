@@ -142,7 +142,7 @@ export const CASBAH_SCENARIO = {
                 // --- POI NAVIGATION SORTIE VERS LA RUE (HUB) ---
                 {
                     id: 'nav_exit_rue',
-                    position: { x: -243, y: -232, z: 369 },
+                    position: { x: -191.99, y: -182.70, z: 299.60 },
                     audio: '',
                     poiType: 'navigation',
                     isExit: true,
@@ -253,8 +253,8 @@ export const CASBAH_SCENARIO = {
         },
         'hub_rue': {
             backgrounds: {
-                day: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant la porte/background/01_bg.png',
-                night: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant la porte/background/01_bg.png'
+                day: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant%20la%20porte/background/01_bg.png',
+                night: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant%20la%20porte/background/01_bg.png'
             },
             ambience: {
                 day:   null,

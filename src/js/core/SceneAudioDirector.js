@@ -51,9 +51,9 @@ export class SceneAudioDirector {
 
         const src = this._resolveAmbience(nodeData, isNight);
         this._expectedAmbience = src;
-        console.info(`[SceneAudioDirector] → "${nodeId}" | ${isNight ? '🌙 Nuit' : '☀️ Jour'} | ${src.split('/').pop()}`);
+        console.info(`[SceneAudioDirector] → "${nodeId}" | ${isNight ? '🌙 Nuit' : '☀️ Jour'} | ${src ? src.split('/').pop() : 'none'}`);
         this._applySceneMix(nodeId);
-        this.audio.forcePlayAmbience(src, fadeDuration);
+        if (src) this.audio.forcePlayAmbience(src, fadeDuration);
         this._preloadNeighbors(nodeId);
         this._refreshMixer();
     }
@@ -67,9 +67,9 @@ export class SceneAudioDirector {
 
         const src = this._resolveAmbience(nodeData, isNight);
         this._expectedAmbience = src;
-        console.info(`[SceneAudioDirector] ⏰ TT → ${isNight ? '🌙' : '☀️'} | ${src.split('/').pop()}`);
+        console.info(`[SceneAudioDirector] ⏰ TT → ${isNight ? '🌙' : '☀️'} | ${src ? src.split('/').pop() : 'none'}`);
         this._applySceneMix(this._currentNodeId);
-        this.audio.forcePlayAmbience(src, fadeDuration);
+        if (src) this.audio.forcePlayAmbience(src, fadeDuration);
         this._refreshMixer();
     }
 

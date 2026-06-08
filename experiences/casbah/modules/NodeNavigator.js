@@ -37,6 +37,10 @@ const ARROW_CONFIGS = {
     'basement->patio': {
         position: { x: -66.31, y: -171.87, z: -355.06 },
         rotation: [-Math.PI / 2, 0, -5.95]
+    },
+    'patio->hub_rue': {
+        position: { x: -191.99, y: -182.70, z: 299.60 },
+        rotation: [-1.57, 0, -2.95]
     }
 };
 
