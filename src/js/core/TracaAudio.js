@@ -111,26 +111,14 @@ export class TracaAudio {
      * À appeler dès le premier clic/touch dans l'application.
      */
     unlockAudioContext() {
+        // Reprend le contexte WebAudio si suspendu (analyseur karaoké)
         if (this.ctx && this.ctx.state === 'suspended') {
             this.ctx.resume().catch(() => { });
         }
-        
-        // Anti-blocage iOS / Safari : Forcer l'autorisation de tous les canaux HTMLAudioElement
-        // lors de la toute première interaction utilisateur.
-        if (!this._iosUnlocked) {
-            this._iosUnlocked = true;
-            Object.values(this.channels).forEach(el => {
-                try {
-                    // Un load() explicite suivi d'un play() (même vide) transfère le jeton d'autorisation
-                    // de l'interaction utilisateur vers la balise <audio> pour les futurs setTimeout.
-                    el.load();
-                    const p = el.play();
-                    if (p !== undefined) {
-                        p.then(() => { el.pause(); }).catch(() => {});
-                    }
-                } catch (e) {}
-            });
-        }
+        // NOTE: On ne touche PAS aux éléments HTMLAudioElement ici.
+        // Appeler el.play() sans src corrompt l'état interne de l'élément.
+        // Le jeton de geste utilisateur est transmis directement via
+        // les appels à play() dans playMusic() / playAmbience().
     }
 
     getNarrationAmplitude() {
@@ -165,21 +153,17 @@ export class TracaAudio {
             '/assets/levels/level_01_casbah/global/sfx/sfx_magical_focus.mp3'
         ];
 
-        console.info('[TracaAudio] Preloading core audio into RAM...');
-        const promises = coreAudioPaths.map(async path => {
-            if (this.sfxCache[path]) return; // Déjà chargé
-            try {
-                const response = await fetch(path);
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                const blob = await response.blob();
-                this.sfxCache[path] = URL.createObjectURL(blob);
-            } catch (err) {
-                console.warn('[TracaAudio] Échec du preload en RAM pour', path, err);
-            }
+        console.info('[TracaAudio] Preloading core audio into browser cache...');
+        coreAudioPaths.forEach(path => {
+            if (this.sfxCache[path]) return;
+            const a = new Audio();
+            a.preload = 'auto';
+            a.src = path;
+            a.load();
+            this.sfxCache[path] = path; // Marqué comme préchargé
         });
-
-        await Promise.all(promises);
-        console.info('[TracaAudio] Core audio preloaded in RAM.');
+        
+        console.info('[TracaAudio] Core audio preloaded in browser cache.');
     }
 
     _getRamPath(resolvedPath) {

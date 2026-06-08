@@ -728,16 +728,18 @@ class CasbahExperience {
                 this.controlsManager.setAngles(startCam.az, startCam.pol);
             }
 
+            // ─── CRITIQUE: play() DOIT être synchrone avec le geste utilisateur ───
+            // setTimeout() > 0 casse la chaîne d'activation et le navigateur bloque
+            const music = this.state.isNight ? 'casbah_night_music_01.mp3' : 'casbah_day_music_01.mp3';
+            tracaAudio.playMusic(music, 3);
+            this.sceneAudioDirector.onNodeEnter(this.state.currentNodeId, this.state.isNight, 3);
+
             setTimeout(() => {
                 this.els.hud.style.display = 'flex';
                 this.controlsManager.orbit.autoRotate = true;
 
                 const ttBtn = document.getElementById('btn-time-travel');
                 if (ttBtn) { ttBtn.classList.remove('is-night'); ttBtn.classList.add('is-day'); }
-
-                const music = this.state.isNight ? 'casbah_night_music_01.mp3' : 'casbah_day_music_01.mp3';
-                tracaAudio.playMusic(music, 7);
-                this.sceneAudioDirector.onNodeEnter(this.state.currentNodeId, this.state.isNight, 7);
 
                 this._poiInteraction(true);
 
