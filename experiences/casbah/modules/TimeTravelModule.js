@@ -1,4 +1,4 @@
-﻿/**
+/**
  * TimeTravelModule — Traca Replay
  * ─────────────────────────────────────────────────────────────────────────────
  * Gère la transition cinématique Jour ↔ Nuit :
@@ -103,7 +103,6 @@ export class TimeTravelModule {
             if (this._label) this._label.textContent = 'Mode Nuit';
             this.hudEl?.classList.add('night-mode');
             this.audio?.playMusic('casbah_night_music_01.mp3', 3);
-            this.audio?.playAmbience('night/02_ambience_night.mp3', 3);
         } else {
             this.sphereDay.material.opacity   = 1;
             this.sphereNight.material.opacity = 0;
@@ -111,7 +110,6 @@ export class TimeTravelModule {
             if (this._label) this._label.textContent = 'Mode Jour';
             this.hudEl?.classList.remove('night-mode');
             this.audio?.playMusic('casbah_day_music_01.mp3', 3);
-            this.audio?.playAmbience('day/01_ambience_day.mp3', 3);
         }
 
         // Update bouton éditeur si présent

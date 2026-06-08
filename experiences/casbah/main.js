@@ -252,6 +252,16 @@ class CasbahExperience {
             hudEl: this.els.hud,
             webglWrap: this.els.webglWrap,
             onToggle: (isNight) => {
+                // Sync state
+                this.state.isNight = isNight;
+
+                // ── Ambience par scène selon le temps ──────────────────────
+                const curNode = CASBAH_SCENARIO.nodes[this.state.currentNodeId];
+                if (curNode?.ambience) {
+                    const src = isNight ? curNode.ambience.night : curNode.ambience.day;
+                    tracaAudio.playAmbience(src, 3);
+                }
+
                 this._updatePoiVisibility();
                 if (this.navigator) this.navigator.rebuildArrows();
                 if (this.state.mode === 'EDIT' && this.editor) this.editor.renderEditorList();
@@ -275,6 +285,14 @@ class CasbahExperience {
                 this.state.scenarioData = nodeData;
                 this._processLoadedData(nodeData);
                 this._updateQuestUI();
+
+                // ── Ambience par scène ─────────────────────────────────────
+                if (nodeData.ambience) {
+                    const ambienceKey = this.state.isNight ? 'night' : 'day';
+                    const src = nodeData.ambience[ambienceKey] || nodeData.ambience.day;
+                    tracaAudio.playAmbience(src, 2);
+                }
+
                 if (this.state.mode === 'EDIT' && this.editor) {
                     this.editor.renderEditorList();
                     this.editor.renderAudioNodeList();

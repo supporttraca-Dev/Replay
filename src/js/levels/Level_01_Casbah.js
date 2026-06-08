@@ -8,6 +8,10 @@ export const CASBAH_SCENARIO = {
                 day: '../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/background/01_bg.png',
                 night: '../../assets/levels/level_01_casbah/scenes/02_rez_de_chaussee_nuit/background/02_bg.png'
             },
+            ambience: {
+                day:   '/assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/ambience/01_ambience_day.mp3',
+                night: '/assets/levels/level_01_casbah/scenes/02_rez_de_chaussee_nuit/elements/ambience/02_ambience_night.mp3'
+            },
             startCam: { az: 1.5856460275171018, pol: 1.3762056082747058 },
             pois: [
                 {
@@ -142,6 +146,10 @@ export const CASBAH_SCENARIO = {
                 day: '../../assets/levels/level_01_casbah/scenes/03_etage/background/03_bg.png',
                 night: '../../assets/levels/level_01_casbah/scenes/03_etage/background/03_bg.png'
             },
+            ambience: {
+                day:   '/assets/levels/level_01_casbah/scenes/03_etage/ambience/01_ambience_day_etage.mp3',
+                night: '/assets/levels/level_01_casbah/scenes/03_etage/ambience/01_ambience_day_etage.mp3'
+            },
             startCam: { az: 0, pol: 1.57 },
             pois: [
                 // --- POI NAVIGATION RETOUR AU PATIO ---
@@ -179,6 +187,10 @@ export const CASBAH_SCENARIO = {
                 day: '../../assets/levels/level_01_casbah/scenes/04_chambre/background/04_bg.png',
                 night: '../../assets/levels/level_01_casbah/scenes/04_chambre/background/04_bg.png'
             },
+            ambience: {
+                day:   '/assets/levels/level_01_casbah/scenes/04_chambre/ambience/01_ambience_day_chambre.mp3',
+                night: '/assets/levels/level_01_casbah/scenes/04_chambre/ambience/01_ambience_day_chambre.mp3'
+            },
             startCam: { az: 0, pol: 1.57 },
             pois: [
                 // --- POI NAVIGATION RETOUR A LA TERRASSE ---
@@ -201,6 +213,10 @@ export const CASBAH_SCENARIO = {
             backgrounds: {
                 day: '../../assets/levels/level_01_casbah/scenes/05_sous_sol/background/05_bg.png',
                 night: '../../assets/levels/level_01_casbah/scenes/05_sous_sol/background/05_bg.png'
+            },
+            ambience: {
+                day:   '/assets/levels/level_01_casbah/scenes/05_sous_sol/ambiance/01_ambience_day_sous sol.mp3',
+                night: '/assets/levels/level_01_casbah/scenes/05_sous_sol/ambiance/01_ambience_day_sous sol.mp3'
             },
             startCam: { az: 3.14, pol: 1.57 },
             pois: [
