@@ -283,13 +283,13 @@ export class NodeNavigator {
             ctx.font         = 'bold 22px serif';
             ctx.textAlign    = 'center';
             ctx.textBaseline = 'top';
-            // Halo noir pour lisibilité
-            ctx.shadowColor  = 'rgba(0,0,0,0.95)';
-            ctx.shadowBlur   = 8;
-            ctx.fillStyle    = 'rgba(0,0,0,0.7)';
-            const tw = ctx.measureText(label).width;
-            ctx.fillRect(W/2 - tw/2 - 6, 262, tw + 12, 30);
-            ctx.shadowBlur   = 0;
+            
+            // Contour noir pour lisibilité
+            ctx.lineWidth    = 4;
+            ctx.strokeStyle  = 'rgba(0,0,0,0.8)';
+            ctx.strokeText(label, W / 2, 265);
+            
+            // Texte
             ctx.fillStyle    = mainColor;
             ctx.fillText(label, W / 2, 265);
         }
@@ -366,12 +366,13 @@ export class NodeNavigator {
                 ctx.font         = 'bold 22px serif';
                 ctx.textAlign    = 'center';
                 ctx.textBaseline = 'top';
-                ctx.shadowColor  = 'rgba(0,0,0,0.95)';
-                ctx.shadowBlur   = 8;
-                ctx.fillStyle    = 'rgba(0,0,0,0.65)';
-                const tw = ctx.measureText(label).width;
-                ctx.fillRect(W / 2 - tw / 2 - 6, 268, tw + 12, 30);
-                ctx.shadowBlur   = 0;
+                
+                // Contour noir pour lisibilité
+                ctx.lineWidth    = 4;
+                ctx.strokeStyle  = 'rgba(0,0,0,0.8)';
+                ctx.strokeText(label, W / 2, 271);
+                
+                // Texte
                 ctx.fillStyle    = '#e7ba80';
                 ctx.fillText(label, W / 2, 271);
             }

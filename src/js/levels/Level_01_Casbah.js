@@ -268,7 +268,7 @@ export const CASBAH_SCENARIO = {
                     position: { x: 393.55, y: -71.24, z: 6.51 },
                     audio: '',
                     poiType: 'navigation',
-                    iconUrl: '/assets/levels/level_02_casbah_rue/global/door_icone.svg',
+                    iconUrl: '../../assets/levels/level_02_casbah_rue/global/door_icone.svg',
                     targetNode: 'patio',
                     timeMode: 'day',
                     content: {
