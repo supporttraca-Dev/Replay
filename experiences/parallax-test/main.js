@@ -38,7 +38,7 @@ class ParallaxTest {
 
         const textureLoader = new THREE.TextureLoader();
         // Chargement de l'image du patio (Level 1, Scene 1)
-        const texture = textureLoader.load('../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee/background/01_bg.jpg');
+        const texture = textureLoader.load('../../assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/background/01_bg.png');
         texture.colorSpace = THREE.SRGBColorSpace;
 
         const material = new THREE.MeshBasicMaterial({ map: texture });
