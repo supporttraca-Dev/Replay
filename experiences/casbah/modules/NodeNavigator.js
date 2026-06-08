@@ -11,6 +11,7 @@
  * Dépendances : Three.js, scénario data, sphereDay, sphereNight, controls, tracaAudio
  */
 import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { CSS2DObject } from 'https://unpkg.com/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js';
 
 /** Config hardcodée des positions/rotations des flèches de sol par chemin node */
 const ARROW_CONFIGS = {
@@ -296,7 +297,6 @@ export class NodeNavigator {
             div.className = 'arrow-floor-label';
             div.textContent = label;
             div.style.cssText = 'color:#e7ba80;font-family:serif;font-size:13px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.9);pointer-events:none;margin-top:80px;white-space:nowrap;';
-            const { CSS2DObject } = await import('https://unpkg.com/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js');
             const labelObj = new CSS2DObject(div);
             labelObj.position.set(0, -90, 0);
             mesh.add(labelObj);
