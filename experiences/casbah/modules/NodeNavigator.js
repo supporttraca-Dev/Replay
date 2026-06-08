@@ -246,18 +246,19 @@ export class NodeNavigator {
     }
 
     _buildArrowMesh(rotationArray, positionObj, targetNode, isExit = false, label = '') {
-        // Dessiner le chevron sur un canvas
+        const W = 256, H = label ? 300 : 256;
         const canvas = document.createElement('canvas');
-        canvas.width = canvas.height = 256;
+        canvas.width  = W;
+        canvas.height = H;
         const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, 256, 256);
+        ctx.clearRect(0, 0, W, H);
 
         // Couleurs selon le type (sortie = rouge/rosé, normal = doré)
-        const mainColor       = isExit ? '#e76060' : '#e7ba80';
-        const shadowColor     = isExit ? 'rgba(231,96,96,0.95)' : 'rgba(231,186,128,0.95)';
-        const innerShadowColor = isExit ? 'rgba(231,96,96,0.8)' : 'rgba(231,186,128,0.8)';
+        const mainColor        = isExit ? '#e76060' : '#e7ba80';
+        const shadowColor      = isExit ? 'rgba(231,96,96,0.95)' : 'rgba(231,186,128,0.95)';
+        const innerShadowColor = isExit ? 'rgba(231,96,96,0.8)'  : 'rgba(231,186,128,0.8)';
 
-        // Contour sombre
+        // Contour sombre du chevron
         ctx.strokeStyle = 'rgba(15,10,5,0.9)';
         ctx.lineWidth   = 26;
         ctx.lineCap     = 'round';
@@ -265,7 +266,7 @@ export class NodeNavigator {
         ctx.beginPath(); ctx.moveTo(50,150); ctx.lineTo(128,40); ctx.lineTo(206,150); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(70,200); ctx.lineTo(128,110); ctx.lineTo(186,200); ctx.stroke();
 
-        // Chevron
+        // Chevron doré / rouge
         ctx.shadowColor = shadowColor;
         ctx.shadowBlur  = 24;
         ctx.strokeStyle = mainColor;
@@ -275,32 +276,40 @@ export class NodeNavigator {
         ctx.strokeStyle = innerShadowColor;
         ctx.lineWidth   = 8;
         ctx.beginPath(); ctx.moveTo(70,200); ctx.lineTo(128,110); ctx.lineTo(186,200); ctx.stroke();
+        ctx.shadowBlur  = 0;
+
+        // Label texte dessiné directement sur le canvas (3D, attaché à la flèche)
+        if (label) {
+            ctx.font         = 'bold 22px serif';
+            ctx.textAlign    = 'center';
+            ctx.textBaseline = 'top';
+            // Halo noir pour lisibilité
+            ctx.shadowColor  = 'rgba(0,0,0,0.95)';
+            ctx.shadowBlur   = 8;
+            ctx.fillStyle    = 'rgba(0,0,0,0.7)';
+            const tw = ctx.measureText(label).width;
+            ctx.fillRect(W/2 - tw/2 - 6, 262, tw + 12, 30);
+            ctx.shadowBlur   = 0;
+            ctx.fillStyle    = mainColor;
+            ctx.fillText(label, W / 2, 265);
+        }
 
         const texture      = new THREE.CanvasTexture(canvas);
         texture.colorSpace = THREE.SRGBColorSpace;
 
-        const geo  = new THREE.PlaneGeometry(150, 150);
+        // Plane proportionné à la hauteur du canvas
+        const planeH = label ? 175 : 150;
+        const geo  = new THREE.PlaneGeometry(150, planeH);
         const mat  = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide, depthWrite: false });
         const mesh = new THREE.Mesh(geo, mat);
         mesh.rotation.fromArray(rotationArray);
 
-        // Hitbox pour faciliter le tap mobile
+        // Hitbox grande pour faciliter le tap mobile
         const hitGeo = new THREE.PlaneGeometry(250, 250);
         const hitMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
         const hitbox = new THREE.Mesh(hitGeo, hitMat);
         hitbox.userData = { targetNode, isArrow: true };
         mesh.add(hitbox);
-
-        // Label CSS2D sous la flèche
-        if (label) {
-            const div = document.createElement('div');
-            div.className = 'arrow-floor-label';
-            div.textContent = label;
-            div.style.cssText = 'color:#e7ba80;font-family:serif;font-size:13px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.9);pointer-events:none;margin-top:80px;white-space:nowrap;';
-            const labelObj = new CSS2DObject(div);
-            labelObj.position.set(0, -90, 0);
-            mesh.add(labelObj);
-        }
 
         const pos = new THREE.Vector3(positionObj.x, positionObj.y, positionObj.z);
         if (pos.length() > 400) pos.setLength(400);
@@ -310,40 +319,63 @@ export class NodeNavigator {
         return mesh;
     }
 
-    /** Construit un marqueur avec icône SVG au sol (pas un chevron) */
+    /** Construit un marqueur avec icône SVG debout (rotation 0, format d'origine) */
     _buildIconMesh(rotationArray, positionObj, targetNode, iconUrl, label = '') {
-        const canvas  = document.createElement('canvas');
-        canvas.width  = 256;
-        canvas.height = 256;
+        const W = 256, H = label ? 320 : 256;
+        const canvas = document.createElement('canvas');
+        canvas.width  = W;
+        canvas.height = H;
         const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, 256, 256);
+        ctx.clearRect(0, 0, W, H);
 
         const texture = new THREE.CanvasTexture(canvas);
         texture.colorSpace = THREE.SRGBColorSpace;
 
-        const geo  = new THREE.PlaneGeometry(150, 150);
+        // Plane debout — inclinaison 0 sur tous les axes
+        const planeH = label ? 200 : 160;
+        const geo  = new THREE.PlaneGeometry(160, planeH);
         const mat  = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide, depthWrite: false });
         const mesh = new THREE.Mesh(geo, mat);
-        mesh.rotation.fromArray(rotationArray);
+        mesh.rotation.set(0, 0, 0);   // ← toujours debout, format d'origine
 
-        // Charger le SVG et le dessiner sur le canvas
+        // Charger le SVG et le dessiner tel quel (pleine zone, sans déformation)
         const img = new Image();
         img.onload = () => {
-            ctx.clearRect(0, 0, 256, 256);
-            // Cercle de fond doré
-            ctx.shadowColor = 'rgba(231,186,128,0.95)';
-            ctx.shadowBlur  = 24;
-            ctx.fillStyle   = 'rgba(231,186,128,0.2)';
+            ctx.clearRect(0, 0, W, H);
+
+            // Halo doré derrière l'icône
+            ctx.shadowColor = 'rgba(231,186,128,0.8)';
+            ctx.shadowBlur  = 28;
+            ctx.fillStyle   = 'rgba(231,186,128,0.15)';
             ctx.beginPath();
-            ctx.arc(128, 128, 110, 0, Math.PI * 2);
+            ctx.arc(W / 2, 128, 110, 0, Math.PI * 2);
             ctx.fill();
-            ctx.shadowBlur = 0;
-            // Contour
+            ctx.shadowBlur  = 0;
+
+            // Contour cercle
             ctx.strokeStyle = '#e7ba80';
-            ctx.lineWidth   = 6;
+            ctx.lineWidth   = 5;
             ctx.stroke();
-            // Icône SVG centrée
-            ctx.drawImage(img, 48, 30, 160, 160);
+
+            // SVG centré, proportions d'origine (ratio 4501:3001 ≈ 1.5:1)
+            const svgW = 210, svgH = 140;
+            ctx.drawImage(img, (W - svgW) / 2, (256 - svgH) / 2, svgW, svgH);
+
+            // Label texte sous l'icône
+            if (label) {
+                ctx.font         = 'bold 22px serif';
+                ctx.textAlign    = 'center';
+                ctx.textBaseline = 'top';
+                ctx.shadowColor  = 'rgba(0,0,0,0.95)';
+                ctx.shadowBlur   = 8;
+                ctx.fillStyle    = 'rgba(0,0,0,0.65)';
+                const tw = ctx.measureText(label).width;
+                ctx.fillRect(W / 2 - tw / 2 - 6, 268, tw + 12, 30);
+                ctx.shadowBlur   = 0;
+                ctx.fillStyle    = '#e7ba80';
+                ctx.fillText(label, W / 2, 271);
+            }
+
             texture.needsUpdate = true;
         };
         img.src = iconUrl;
