@@ -60,6 +60,9 @@ export class PoiManager {
         if (poiData.poiType === 'navigation') {
             return this._createNavMarker(poiData, currentLang);
         }
+        if (poiData.poiType === 'exit') {
+            return this._createExitMarker(poiData, currentLang);
+        }
         return this._createStandardMarker(poiData);
     }
 
@@ -124,6 +127,34 @@ export class PoiManager {
         return mesh;
     }
 
+    _createExitMarker(poiData, currentLang) {
+        const geo  = new THREE.SphereGeometry(35, 16, 16);
+        const mat  = new THREE.MeshBasicMaterial({ visible: false });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(poiData.position.x, poiData.position.y, poiData.position.z);
+        mesh.userData = { type: 'poi', data: poiData };
+
+        const label = poiData.content?.[currentLang]?.title || 'Sortir';
+
+        const div = document.createElement('div');
+        div.className = 'nav-marker exit-marker';
+        // Design différent : couleur différente et icône "porte/sortie"
+        div.innerHTML = `
+            <div class="nav-arrow" style="filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)); transform: scale(1.1);">
+                <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Flèche creuse ou design spécial sortie -->
+                    <path d="M25 2 L45 25 L35 25 L35 48 L15 48 L15 25 L5 25 Z" fill="rgba(255, 255, 255, 0.9)" stroke="rgba(231, 186, 128, 1)" stroke-width="2"/>
+                </svg>
+            </div>
+            <span class="nav-label" style="color: #fff; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 4px;">${label}</span>
+        `;
+
+        const css = new CSS2DObject(div);
+        mesh.add(css);
+        poiData._cssObj = css;
+        return mesh;
+    }
+
     // ─── Interaction ─────────────────────────────────────────────────────────
 
     _onPointerDown(event) {
@@ -135,8 +166,8 @@ export class PoiManager {
     }
 
     _handleClick(poiData) {
-        // Navigation
-        if (poiData.poiType === 'navigation') {
+        // Navigation & Exit
+        if (poiData.poiType === 'navigation' || poiData.poiType === 'exit') {
             if (poiData.targetNode && this.onNavigate) {
                 this._teleport(poiData.targetNode);
             }

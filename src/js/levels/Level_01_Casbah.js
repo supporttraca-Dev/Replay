@@ -138,6 +138,20 @@ export const CASBAH_SCENARIO = {
                         en: { title: 'Matmoura Door', description: 'Secret door is locked.', transcript: '' },
                         ar: { title: 'باب المطمورة', description: 'باب مقفل.', transcript: '' }
                     }
+                },
+                // --- POI NAVIGATION SORTIE VERS LA RUE (HUB) ---
+                {
+                    id: 'nav_exit_rue',
+                    position: { x: -243, y: -232, z: 369 },
+                    audio: '',
+                    poiType: 'exit',
+                    targetNode: 'hub_rue',
+                    timeMode: 'day', // ou sans timeMode pour l'avoir tout le temps, pour l'instant day
+                    content: {
+                        fr: { title: 'Sortir', description: 'Quitter la maison pour la rue.', transcript: '' },
+                        en: { title: 'Exit', description: 'Leave the house to the street.', transcript: '' },
+                        ar: { title: 'خروج', description: 'مغادرة المنزل إلى الشارع.', transcript: '' }
+                    }
                 }
             ]
         },
@@ -232,6 +246,33 @@ export const CASBAH_SCENARIO = {
                         fr: { title: 'Remonter au patio', description: 'Retourner au rez-de-chaussée.', transcript: '' },
                         en: { title: 'Go up to patio', description: 'Return to ground floor.', transcript: '' },
                         ar: { title: 'الصعود إلى الفناء', description: 'العودة إلى الطابق الأرضي.', transcript: '' }
+                    }
+                }
+            ]
+        },
+        'hub_rue': {
+            backgrounds: {
+                day: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant la porte/background/01_bg.png',
+                night: '../../assets/levels/level_02_casbah_rue/scenes/01_hub_rue_devant la porte/background/01_bg.png'
+            },
+            ambience: {
+                day:   null,
+                night: null
+            },
+            startCam: { az: 3.14, pol: 1.57 },
+            pois: [
+                // --- POI NAVIGATION RETOUR A LA MAISON ---
+                {
+                    id: 'nav_hub_to_patio',
+                    position: { x: 0, y: 0, z: -400 }, // Position temporaire
+                    audio: '',
+                    poiType: 'navigation',
+                    targetNode: 'patio',
+                    timeMode: 'day',
+                    content: {
+                        fr: { title: 'Entrer dans la maison', description: 'Retourner dans le patio.', transcript: '' },
+                        en: { title: 'Enter the house', description: 'Return to the patio.', transcript: '' },
+                        ar: { title: 'دخول المنزل', description: 'العودة إلى الفناء.', transcript: '' }
                     }
                 }
             ]
