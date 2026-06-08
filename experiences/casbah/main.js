@@ -6,6 +6,7 @@ import { Analytics } from '../../src/js/core/Analytics.js';
 import { CASBAH_SCENARIO } from '../../src/js/levels/Level_01_Casbah.js';
 import { swManager } from '../../src/js/core/SWManager.js';
 import { localStore } from '../../src/js/core/db/localStore.js';
+import { SceneAudioDirector } from '../../src/js/core/SceneAudioDirector.js';
 
 import {
     InventoryModule,
@@ -209,6 +210,8 @@ class CasbahExperience {
     }
 
     _initModules() {
+        this.sceneAudioDirector = new SceneAudioDirector(tracaAudio, CASBAH_SCENARIO.nodes);
+
         // 1. Inventory & Codex
         this.inventory = new InventoryModule(
             ARTIFACTS_DB,
@@ -256,11 +259,7 @@ class CasbahExperience {
                 this.state.isNight = isNight;
 
                 // ── Ambience par scène selon le temps ──────────────────────
-                const curNode = CASBAH_SCENARIO.nodes[this.state.currentNodeId];
-                if (curNode?.ambience) {
-                    const src = isNight ? curNode.ambience.night : curNode.ambience.day;
-                    tracaAudio.playAmbience(src, 3);
-                }
+                this.sceneAudioDirector.onTimeTravel(isNight, this.state.currentNodeId);
 
                 this._updatePoiVisibility();
                 if (this.navigator) this.navigator.rebuildArrows();
@@ -287,11 +286,7 @@ class CasbahExperience {
                 this._updateQuestUI();
 
                 // ── Ambience par scène ─────────────────────────────────────
-                if (nodeData.ambience) {
-                    const ambienceKey = this.state.isNight ? 'night' : 'day';
-                    const src = nodeData.ambience[ambienceKey] || nodeData.ambience.day;
-                    tracaAudio.playAmbience(src, 2);
-                }
+                this.sceneAudioDirector.onNodeEnter(this.state.currentNodeId, this.state.isNight);
 
                 if (this.state.mode === 'EDIT' && this.editor) {
                     this.editor.renderEditorList();
@@ -732,11 +727,8 @@ class CasbahExperience {
                 if (ttBtn) { ttBtn.classList.remove('is-night'); ttBtn.classList.add('is-day'); }
 
                 const music = this.state.isNight ? 'casbah_night_music_01.mp3' : 'casbah_day_music_01.mp3';
-                const amb = this.state.isNight
-                    ? '/assets/levels/level_01_casbah/scenes/02_rez_de_chaussee_nuit/elements/ambience/02_ambience_night.mp3'
-                    : '/assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/ambience/01_ambience_day.mp3';
                 tracaAudio.playMusic(music, 7);
-                tracaAudio.playAmbience(amb, 7);
+                this.sceneAudioDirector.onNodeEnter(this.state.currentNodeId, this.state.isNight, 7);
 
                 this._poiInteraction(true);
 

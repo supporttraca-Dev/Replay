@@ -159,8 +159,13 @@ export class TracaAudio {
         const coreAudioPaths = [
             '/assets/levels/level_01_casbah/global/music/casbah_day_music_01.mp3',
             '/assets/levels/level_01_casbah/global/music/casbah_night_music_01.mp3',
+            // ── Ambiences par scène (toutes préchargées en RAM) ───────────────────
             '/assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/ambience/01_ambience_day.mp3',
             '/assets/levels/level_01_casbah/scenes/02_rez_de_chaussee_nuit/elements/ambience/02_ambience_night.mp3',
+            '/assets/levels/level_01_casbah/scenes/03_etage/ambience/01_ambience_day_etage.mp3',
+            '/assets/levels/level_01_casbah/scenes/04_chambre/ambience/01_ambience_day_chambre.mp3',
+            '/assets/levels/level_01_casbah/scenes/05_sous_sol/ambiance/01_ambience_day_sous sol.mp3',
+            // ── SFX globaux ───────────────────────────────────────────────────────
             '/assets/levels/level_01_casbah/global/sfx/time_warp.mp3',
             '/assets/levels/level_01_casbah/global/sfx/sfx_magical_focus.mp3'
         ];
@@ -233,6 +238,33 @@ export class TracaAudio {
         this.currentAmbience = filename;
         Analytics.trackAudioPlayback('ambience', 'play', filename);
         this._crossfade(this.channels.ambience, 'ambience', filename, fadeDuration);
+    }
+
+    /**
+     * Joue une Ambiance en forçant le rechargement même si c'est le même fichier.
+     * À utiliser lors des changements de scène (SceneAudioDirector).
+     */
+    forcePlayAmbience(filename, fadeDuration = 2) {
+        if (!filename) return this.stopAmbience();
+        this.currentAmbience = filename; // Mise à jour sans guard
+        Analytics.trackAudioPlayback('ambience', 'play', filename);
+        this._crossfade(this.channels.ambience, 'ambience', filename, fadeDuration);
+    }
+
+    /**
+     * Précharge un seul fichier audio en RAM (Blob Object URL).
+     * Utilisé par SceneAudioDirector pour anticiper les scènes voisines.
+     */
+    async preloadSingle(path) {
+        if (!path || this.sfxCache[path]) return;
+        try {
+            const response = await fetch(path);
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            const blob = await response.blob();
+            this.sfxCache[path] = URL.createObjectURL(blob);
+        } catch (err) {
+            console.warn('[TracaAudio] Preload failed:', path.split('/').pop(), err);
+        }
     }
 
     /**
