@@ -159,13 +159,8 @@ export class TracaAudio {
         const coreAudioPaths = [
             '/assets/levels/level_01_casbah/global/music/casbah_day_music_01.mp3',
             '/assets/levels/level_01_casbah/global/music/casbah_night_music_01.mp3',
-            // ── Ambiences par scène (toutes préchargées en RAM) ───────────────────
             '/assets/levels/level_01_casbah/scenes/01_rez_de_chaussee_jour/elements/ambience/01_ambience_day.mp3',
             '/assets/levels/level_01_casbah/scenes/02_rez_de_chaussee_nuit/elements/ambience/02_ambience_night.mp3',
-            '/assets/levels/level_01_casbah/scenes/03_etage/ambience/01_ambience_day_etage.mp3',
-            '/assets/levels/level_01_casbah/scenes/04_chambre/ambience/01_ambience_day_chambre.mp3',
-            '/assets/levels/level_01_casbah/scenes/05_sous_sol/ambiance/01_ambience_day_sous sol.mp3',
-            // ── SFX globaux ───────────────────────────────────────────────────────
             '/assets/levels/level_01_casbah/global/sfx/time_warp.mp3',
             '/assets/levels/level_01_casbah/global/sfx/sfx_magical_focus.mp3'
         ];
@@ -252,18 +247,19 @@ export class TracaAudio {
     }
 
     /**
-     * Précharge un seul fichier audio en RAM (Blob Object URL).
-     * Utilisé par SceneAudioDirector pour anticiper les scènes voisines.
+     * Précharge un seul fichier audio via le cache natif du navigateur.
+     * Ne bloque pas le fil d'exécution et ne sature pas la RAM avec des Blobs.
      */
     async preloadSingle(path) {
         if (!path || this.sfxCache[path]) return;
         try {
-            const response = await fetch(path);
-            if (!response.ok) throw new Error('HTTP ' + response.status);
-            const blob = await response.blob();
-            this.sfxCache[path] = URL.createObjectURL(blob);
+            const a = new Audio();
+            a.preload = 'auto';
+            a.src = path;
+            a.load(); // Déclenche la mise en cache réseau
+            this.sfxCache[path] = path; // Marqué comme préchargé
         } catch (err) {
-            console.warn('[TracaAudio] Preload failed:', path.split('/').pop(), err);
+            console.warn('[TracaAudio] Preload failed:', path, err);
         }
     }
 

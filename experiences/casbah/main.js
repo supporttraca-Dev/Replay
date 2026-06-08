@@ -922,9 +922,15 @@ class CasbahExperience {
     }
 
     _msg(txt, isErr = false) {
-        this.els.edStatus.style.color = isErr ? 'var(--c-danger)' : '#4ade80';
-        this.els.edStatus.innerText = txt;
-        setTimeout(() => this.els.edStatus.innerText = '', 3500);
+        if (this.els.edStatus) {
+            this.els.edStatus.style.color = isErr ? 'var(--c-danger)' : '#4ade80';
+            this.els.edStatus.innerText = txt;
+            setTimeout(() => { if (this.els.edStatus) this.els.edStatus.innerText = ''; }, 3500);
+        } else if (this.inventory && this.inventory.showToast) {
+            this.inventory.showToast(txt);
+        } else {
+            console.log(isErr ? '[Traca Error]' : '[Traca Info]', txt);
+        }
     }
 
     _buildHtmlAudioNode(data) {
