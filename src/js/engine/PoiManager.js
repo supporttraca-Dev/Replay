@@ -138,15 +138,13 @@ export class PoiManager {
 
         const div = document.createElement('div');
         div.className = 'nav-marker exit-marker';
-        // Design différent : couleur différente et icône "porte/sortie"
         div.innerHTML = `
-            <div class="nav-arrow" style="filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)); transform: scale(1.1);">
-                <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Flèche creuse ou design spécial sortie -->
-                    <path d="M25 2 L45 25 L35 25 L35 48 L15 48 L15 25 L5 25 Z" fill="rgba(255, 255, 255, 0.9)" stroke="rgba(231, 186, 128, 1)" stroke-width="2"/>
+            <div class="nav-arrow">
+                <svg viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="20,2 38,48 20,36 2,48" fill="rgba(255, 100, 100, 0.95)" />
                 </svg>
             </div>
-            <span class="nav-label" style="color: #fff; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 4px;">${label}</span>
+            <span class="nav-label">${label}</span>
         `;
 
         const css = new CSS2DObject(div);
