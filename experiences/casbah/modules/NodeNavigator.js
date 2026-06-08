@@ -135,8 +135,9 @@ export class NodeNavigator {
             
             // On priorise la position du POI (si le joueur l'a modifiée/placée)
             const finalPosition = navPoi.position || config.position || { x: 0, y: -200, z: 200 };
+            const isExit = navPoi.isExit || false;
 
-            const mesh = this._buildArrowMesh(config.rotation, finalPosition, target);
+            const mesh = this._buildArrowMesh(config.rotation, finalPosition, target, isExit);
             this.scene.add(mesh);
             this.groundArrowMeshes.push(mesh);
         });
@@ -215,12 +216,17 @@ export class NodeNavigator {
         this.groundArrowMeshes = [];
     }
 
-    _buildArrowMesh(rotationArray, positionObj, targetNode) {
+    _buildArrowMesh(rotationArray, positionObj, targetNode, isExit = false) {
         // Dessiner le chevron sur un canvas
         const canvas = document.createElement('canvas');
         canvas.width = canvas.height = 256;
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, 256, 256);
+
+        // Couleurs selon le type (sortie = rouge/rosé, normal = doré)
+        const mainColor = isExit ? '#e76060' : '#e7ba80';
+        const shadowColor = isExit ? 'rgba(231,96,96,0.95)' : 'rgba(231,186,128,0.95)';
+        const innerShadowColor = isExit ? 'rgba(231,96,96,0.8)' : 'rgba(231,186,128,0.8)';
 
         // Contour sombre
         ctx.strokeStyle = 'rgba(15,10,5,0.9)';
@@ -230,15 +236,15 @@ export class NodeNavigator {
         ctx.beginPath(); ctx.moveTo(50,150); ctx.lineTo(128,40); ctx.lineTo(206,150); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(70,200); ctx.lineTo(128,110); ctx.lineTo(186,200); ctx.stroke();
 
-        // Chevron doré
-        ctx.shadowColor = 'rgba(231,186,128,0.95)';
+        // Chevron
+        ctx.shadowColor = shadowColor;
         ctx.shadowBlur  = 24;
-        ctx.strokeStyle = '#e7ba80';
+        ctx.strokeStyle = mainColor;
         ctx.lineWidth   = 14;
         ctx.beginPath(); ctx.moveTo(50,150); ctx.lineTo(128,40); ctx.lineTo(206,150); ctx.stroke();
 
         ctx.shadowBlur  = 12;
-        ctx.strokeStyle = 'rgba(231,186,128,0.8)';
+        ctx.strokeStyle = innerShadowColor;
         ctx.lineWidth   = 8;
         ctx.beginPath(); ctx.moveTo(70,200); ctx.lineTo(128,110); ctx.lineTo(186,200); ctx.stroke();
 

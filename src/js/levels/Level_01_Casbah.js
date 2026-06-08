@@ -144,7 +144,8 @@ export const CASBAH_SCENARIO = {
                     id: 'nav_exit_rue',
                     position: { x: -243, y: -232, z: 369 },
                     audio: '',
-                    poiType: 'exit',
+                    poiType: 'navigation',
+                    isExit: true,
                     targetNode: 'hub_rue',
                     timeMode: 'day', // ou sans timeMode pour l'avoir tout le temps, pour l'instant day
                     content: {
