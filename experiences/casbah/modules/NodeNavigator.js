@@ -42,6 +42,10 @@ const ARROW_CONFIGS = {
         position: { x: -191.99, y: -182.70, z: 299.60 },
         rotation: [-1.57, 0, -2.95]
     },
+    'hub_rue->patio': {
+        position: { x: 393.55, y: -71.24, z: 6.51 },
+        rotation: [-1.57, 0, 0]
+    },
     'hub_rue->rue_porte': {
         position: { x: -233.44, y: -323.80, z: -25.70 },
         rotation: [-1.57, 0, -4.90]
@@ -149,11 +153,19 @@ export class NodeNavigator {
             const key    = `${this.state.currentNodeId}->${target}`;
             const config = ARROW_CONFIGS[key] || { rotation: [-Math.PI / 2, 0, 0] };
             
-            // On priorise la position du POI (si le joueur l'a modifiée/placée)
+            // On priorise la position du POI
             const finalPosition = navPoi.position || config.position || { x: 0, y: -200, z: 200 };
-            const isExit = navPoi.isExit || false;
+            const isExit   = navPoi.isExit   || false;
+            const iconUrl  = navPoi.iconUrl  || null;
+            // Label affiché sous la flèche (titre FR par défaut)
+            const label    = navPoi.content?.fr?.title || '';
 
-            const mesh = this._buildArrowMesh(config.rotation, finalPosition, target, isExit);
+            let mesh;
+            if (iconUrl) {
+                mesh = this._buildIconMesh(config.rotation, finalPosition, target, iconUrl, label);
+            } else {
+                mesh = this._buildArrowMesh(config.rotation, finalPosition, target, isExit, label);
+            }
             this.scene.add(mesh);
             this.groundArrowMeshes.push(mesh);
         });
@@ -232,7 +244,7 @@ export class NodeNavigator {
         this.groundArrowMeshes = [];
     }
 
-    _buildArrowMesh(rotationArray, positionObj, targetNode, isExit = false) {
+    _buildArrowMesh(rotationArray, positionObj, targetNode, isExit = false, label = '') {
         // Dessiner le chevron sur un canvas
         const canvas = document.createElement('canvas');
         canvas.width = canvas.height = 256;
@@ -240,8 +252,8 @@ export class NodeNavigator {
         ctx.clearRect(0, 0, 256, 256);
 
         // Couleurs selon le type (sortie = rouge/rosé, normal = doré)
-        const mainColor = isExit ? '#e76060' : '#e7ba80';
-        const shadowColor = isExit ? 'rgba(231,96,96,0.95)' : 'rgba(231,186,128,0.95)';
+        const mainColor       = isExit ? '#e76060' : '#e7ba80';
+        const shadowColor     = isExit ? 'rgba(231,96,96,0.95)' : 'rgba(231,186,128,0.95)';
         const innerShadowColor = isExit ? 'rgba(231,96,96,0.8)' : 'rgba(231,186,128,0.8)';
 
         // Contour sombre
@@ -258,29 +270,87 @@ export class NodeNavigator {
         ctx.strokeStyle = mainColor;
         ctx.lineWidth   = 14;
         ctx.beginPath(); ctx.moveTo(50,150); ctx.lineTo(128,40); ctx.lineTo(206,150); ctx.stroke();
-
         ctx.shadowBlur  = 12;
         ctx.strokeStyle = innerShadowColor;
         ctx.lineWidth   = 8;
         ctx.beginPath(); ctx.moveTo(70,200); ctx.lineTo(128,110); ctx.lineTo(186,200); ctx.stroke();
 
-        const texture       = new THREE.CanvasTexture(canvas);
-        texture.colorSpace  = THREE.SRGBColorSpace;
+        const texture      = new THREE.CanvasTexture(canvas);
+        texture.colorSpace = THREE.SRGBColorSpace;
 
-        // Flèche visible (grande pour mobile)
         const geo  = new THREE.PlaneGeometry(150, 150);
-        const mat  = new THREE.MeshBasicMaterial({
-            map: texture, transparent: true,
-            side: THREE.DoubleSide, depthWrite: false
-        });
+        const mat  = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide, depthWrite: false });
         const mesh = new THREE.Mesh(geo, mat);
         mesh.rotation.fromArray(rotationArray);
 
-        // Hitbox invisible plus grand encore pour faciliter le tap mobile
+        // Hitbox pour faciliter le tap mobile
         const hitGeo = new THREE.PlaneGeometry(250, 250);
-        const hitMat = new THREE.MeshBasicMaterial({
-            transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false
-        });
+        const hitMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
+        const hitbox = new THREE.Mesh(hitGeo, hitMat);
+        hitbox.userData = { targetNode, isArrow: true };
+        mesh.add(hitbox);
+
+        // Label CSS2D sous la flèche
+        if (label) {
+            const div = document.createElement('div');
+            div.className = 'arrow-floor-label';
+            div.textContent = label;
+            div.style.cssText = 'color:#e7ba80;font-family:serif;font-size:13px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,0.9);pointer-events:none;margin-top:80px;white-space:nowrap;';
+            const { CSS2DObject } = await import('https://unpkg.com/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js');
+            const labelObj = new CSS2DObject(div);
+            labelObj.position.set(0, -90, 0);
+            mesh.add(labelObj);
+        }
+
+        const pos = new THREE.Vector3(positionObj.x, positionObj.y, positionObj.z);
+        if (pos.length() > 400) pos.setLength(400);
+        mesh.position.copy(pos);
+        mesh.userData = { targetNode, isArrow: true, originalPoiPos: positionObj };
+
+        return mesh;
+    }
+
+    /** Construit un marqueur avec icône SVG au sol (pas un chevron) */
+    _buildIconMesh(rotationArray, positionObj, targetNode, iconUrl, label = '') {
+        const canvas  = document.createElement('canvas');
+        canvas.width  = 256;
+        canvas.height = 256;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 256, 256);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.colorSpace = THREE.SRGBColorSpace;
+
+        const geo  = new THREE.PlaneGeometry(150, 150);
+        const mat  = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide, depthWrite: false });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.rotation.fromArray(rotationArray);
+
+        // Charger le SVG et le dessiner sur le canvas
+        const img = new Image();
+        img.onload = () => {
+            ctx.clearRect(0, 0, 256, 256);
+            // Cercle de fond doré
+            ctx.shadowColor = 'rgba(231,186,128,0.95)';
+            ctx.shadowBlur  = 24;
+            ctx.fillStyle   = 'rgba(231,186,128,0.2)';
+            ctx.beginPath();
+            ctx.arc(128, 128, 110, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            // Contour
+            ctx.strokeStyle = '#e7ba80';
+            ctx.lineWidth   = 6;
+            ctx.stroke();
+            // Icône SVG centrée
+            ctx.drawImage(img, 48, 30, 160, 160);
+            texture.needsUpdate = true;
+        };
+        img.src = iconUrl;
+
+        // Hitbox
+        const hitGeo = new THREE.PlaneGeometry(250, 250);
+        const hitMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
         const hitbox = new THREE.Mesh(hitGeo, hitMat);
         hitbox.userData = { targetNode, isArrow: true };
         mesh.add(hitbox);

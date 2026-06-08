@@ -262,12 +262,13 @@ export const CASBAH_SCENARIO = {
             },
             startCam: { az: 3.14, pol: 1.57 },
             pois: [
-                // --- RETOUR À LA MAISON ---
+                // --- RETOUR À LA MAISON (icône porte) ---
                 {
                     id: 'nav_hub_to_patio',
-                    position: { x: 0, y: 0, z: -400 },
+                    position: { x: 393.55, y: -71.24, z: 6.51 },
                     audio: '',
                     poiType: 'navigation',
+                    iconUrl: '/assets/levels/level_02_casbah_rue/global/door_icone.svg',
                     targetNode: 'patio',
                     timeMode: 'day',
                     content: {
