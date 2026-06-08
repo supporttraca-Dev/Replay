@@ -277,7 +277,7 @@ export const CASBAH_SCENARIO = {
                         ar: { title: 'دخول المنزل', description: 'العودة إلى الفناء.', transcript: '' }
                     }
                 },
-                // --- VERS LA PORTE (RUE) ---
+                // --- VERS LE PORT ---
                 {
                     id: 'nav_hub_to_rue_porte',
                     position: { x: -233.44, y: -323.80, z: -25.70 },
@@ -286,9 +286,9 @@ export const CASBAH_SCENARIO = {
                     targetNode: 'rue_porte',
                     timeMode: 'day',
                     content: {
-                        fr: { title: 'Vers la porte', description: 'Explorer la rue près de la porte.', transcript: '' },
-                        en: { title: 'Towards the door', description: 'Explore the street near the door.', transcript: '' },
-                        ar: { title: 'نحو الباب', description: 'استكشاف الشارع بالقرب من الباب.', transcript: '' }
+                        fr: { title: 'Vers le port', description: 'Explorer la rue vers le port.', transcript: '' },
+                        en: { title: 'Towards the port', description: 'Explore the street towards the port.', transcript: '' },
+                        ar: { title: 'نحو الميناء', description: 'استكشاف الشارع نحو الميناء.', transcript: '' }
                     }
                 },
                 // --- VERS LES HAUTEURS DE LA CASBAH ---

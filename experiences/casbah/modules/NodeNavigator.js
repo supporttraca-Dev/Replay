@@ -246,7 +246,7 @@ export class NodeNavigator {
     }
 
     _buildArrowMesh(rotationArray, positionObj, targetNode, isExit = false, label = '') {
-        const W = 256, H = label ? 300 : 256;
+        const W = 256, H = 256;
         const canvas = document.createElement('canvas');
         canvas.width  = W;
         canvas.height = H;
@@ -278,28 +278,10 @@ export class NodeNavigator {
         ctx.beginPath(); ctx.moveTo(70,200); ctx.lineTo(128,110); ctx.lineTo(186,200); ctx.stroke();
         ctx.shadowBlur  = 0;
 
-        // Label texte dessiné directement sur le canvas (3D, attaché à la flèche)
-        if (label) {
-            ctx.font         = 'bold 22px serif';
-            ctx.textAlign    = 'center';
-            ctx.textBaseline = 'top';
-            
-            // Contour noir pour lisibilité
-            ctx.lineWidth    = 4;
-            ctx.strokeStyle  = 'rgba(0,0,0,0.8)';
-            ctx.strokeText(label, W / 2, 265);
-            
-            // Texte
-            ctx.fillStyle    = mainColor;
-            ctx.fillText(label, W / 2, 265);
-        }
-
         const texture      = new THREE.CanvasTexture(canvas);
         texture.colorSpace = THREE.SRGBColorSpace;
 
-        // Plane proportionné à la hauteur du canvas
-        const planeH = label ? 175 : 150;
-        const geo  = new THREE.PlaneGeometry(150, planeH);
+        const geo  = new THREE.PlaneGeometry(150, 150);
         const mat  = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide, depthWrite: false });
         const mesh = new THREE.Mesh(geo, mat);
         mesh.rotation.fromArray(rotationArray);
@@ -310,6 +292,15 @@ export class NodeNavigator {
         const hitbox = new THREE.Mesh(hitGeo, hitMat);
         hitbox.userData = { targetNode, isArrow: true };
         mesh.add(hitbox);
+        
+        // Ajout du label 3D (Sprite)
+        if (label) {
+            const sprite = this._createLabelSprite(label);
+            // La flèche est couchée sur le sol (rotation X = -90). 
+            // Son axe Z local pointe vers le haut. On positionne le texte un peu au-dessus.
+            sprite.position.set(0, -80, 20);
+            mesh.add(sprite);
+        }
 
         const pos = new THREE.Vector3(positionObj.x, positionObj.y, positionObj.z);
         if (pos.length() > 400) pos.setLength(400);
@@ -321,7 +312,7 @@ export class NodeNavigator {
 
     /** Construit un marqueur avec icône SVG debout (rotation 0, format d'origine) */
     _buildIconMesh(rotationArray, positionObj, targetNode, iconUrl, label = '') {
-        const W = 256, H = label ? 320 : 256;
+        const W = 256, H = 256;
         const canvas = document.createElement('canvas');
         canvas.width  = W;
         canvas.height = H;
@@ -332,8 +323,7 @@ export class NodeNavigator {
         texture.colorSpace = THREE.SRGBColorSpace;
 
         // Plane debout — inclinaison 0 sur tous les axes
-        const planeH = label ? 200 : 160;
-        const geo  = new THREE.PlaneGeometry(160, planeH);
+        const geo  = new THREE.PlaneGeometry(160, 160);
         const mat  = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide, depthWrite: false });
         const mesh = new THREE.Mesh(geo, mat);
         mesh.rotation.set(0, 0, 0);   // ← toujours debout, format d'origine
@@ -360,23 +350,7 @@ export class NodeNavigator {
             // SVG centré, proportions d'origine (ratio 4501:3001 ≈ 1.5:1)
             const svgW = 210, svgH = 140;
             ctx.drawImage(img, (W - svgW) / 2, (256 - svgH) / 2, svgW, svgH);
-
-            // Label texte sous l'icône
-            if (label) {
-                ctx.font         = 'bold 22px serif';
-                ctx.textAlign    = 'center';
-                ctx.textBaseline = 'top';
-                
-                // Contour noir pour lisibilité
-                ctx.lineWidth    = 4;
-                ctx.strokeStyle  = 'rgba(0,0,0,0.8)';
-                ctx.strokeText(label, W / 2, 271);
-                
-                // Texte
-                ctx.fillStyle    = '#e7ba80';
-                ctx.fillText(label, W / 2, 271);
-            }
-
+            
             texture.needsUpdate = true;
         };
         img.src = iconUrl;
@@ -387,6 +361,14 @@ export class NodeNavigator {
         const hitbox = new THREE.Mesh(hitGeo, hitMat);
         hitbox.userData = { targetNode, isArrow: true };
         mesh.add(hitbox);
+        
+        // Ajout du label 3D (Sprite)
+        if (label) {
+            const sprite = this._createLabelSprite(label);
+            // L'icône est debout (rotation 0, 0, 0). Son axe Y pointe vers le haut.
+            sprite.position.set(0, -90, 0);
+            mesh.add(sprite);
+        }
 
         const pos = new THREE.Vector3(positionObj.x, positionObj.y, positionObj.z);
         if (pos.length() > 400) pos.setLength(400);
@@ -394,5 +376,34 @@ export class NodeNavigator {
         mesh.userData = { targetNode, isArrow: true, originalPoiPos: positionObj };
 
         return mesh;
+    }
+    
+    _createLabelSprite(label) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        
+        ctx.font = 'bold 50px "Cinzel", "Times New Roman", serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Contour noir épais
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
+        ctx.strokeText(label, 256, 64);
+        
+        // Texte doré
+        ctx.fillStyle = '#e7ba80';
+        ctx.fillText(label, 256, 64);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        
+        const mat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false });
+        const sprite = new THREE.Sprite(mat);
+        // Ratio 4:1
+        sprite.scale.set(160, 40, 1);
+        return sprite;
     }
 }
