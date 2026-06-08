@@ -101,10 +101,13 @@
 
     <!-- Logo Traca (supprimé selon demande) -->
     
-    <!-- Bouton Retour à la Map (Haut Gauche) -->
-    <button id="btn-hud-back-map" class="hud-icon-btn" title="Retour à la carte" onclick="window.hudBackToMap()" style="position:fixed; top:20px; left:20px; z-index:1000; display:flex; align-items:center; gap:6px; font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:1.5px; padding:8px 14px; color:rgba(231,186,128,0.9); border:1px solid rgba(231,186,128,0.3); border-radius:6px; background:rgba(0,0,0,0.45); backdrop-filter:blur(8px); cursor:pointer; transition:all .2s; white-space:nowrap;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Carte
+    <!-- Bouton Audio Debugger (Haut Gauche) -->
+    <button id="btn-hud-audiodebug" class="hud-icon-btn" title="Ouvrir Debugger Audio" style="position:fixed; top:20px; left:20px; z-index:1000; display:flex; align-items:center; gap:6px; font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:1.5px; padding:8px 14px; color:rgba(231,186,128,0.9); border:1px solid rgba(231,186,128,0.3); border-radius:6px; background:rgba(0,0,0,0.45); backdrop-filter:blur(8px); cursor:pointer; transition:all .2s; white-space:nowrap;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+        </svg>
+        Audio
     </button>
 
     <!-- Bouton Aide (Bas Gauche) -->
@@ -142,13 +145,6 @@
             <svg class="icon-vol-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="display:none;">
                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
                 <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
-            </svg>
-        </button>
-        <!-- Audio Debugger btn -->
-        <button id="btn-hud-audiodebug" class="hud-icon-btn" title="Debugger Audio">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
             </svg>
         </button>
         <!-- Eagle Vision btn (Nuit) -->
