@@ -158,14 +158,12 @@ export class NodeNavigator {
             const finalPosition = navPoi.position || config.position || { x: 0, y: -200, z: 200 };
             const isExit   = navPoi.isExit   || false;
             const iconUrl  = navPoi.iconUrl  || null;
-            // Label affiché sous la flèche (titre FR par défaut)
-            const label    = navPoi.content?.fr?.title || '';
 
             let mesh;
             if (iconUrl) {
-                mesh = this._buildIconMesh(config.rotation, finalPosition, target, iconUrl, label);
+                mesh = this._buildIconMesh(config.rotation, finalPosition, target, iconUrl);
             } else {
-                mesh = this._buildArrowMesh(config.rotation, finalPosition, target, isExit, label);
+                mesh = this._buildArrowMesh(config.rotation, finalPosition, target, isExit);
             }
             this.scene.add(mesh);
             this.groundArrowMeshes.push(mesh);
@@ -245,7 +243,7 @@ export class NodeNavigator {
         this.groundArrowMeshes = [];
     }
 
-    _buildArrowMesh(rotationArray, positionObj, targetNode, isExit = false, label = '') {
+    _buildArrowMesh(rotationArray, positionObj, targetNode, isExit = false) {
         const W = 256, H = 256;
         const canvas = document.createElement('canvas');
         canvas.width  = W;
@@ -292,15 +290,6 @@ export class NodeNavigator {
         const hitbox = new THREE.Mesh(hitGeo, hitMat);
         hitbox.userData = { targetNode, isArrow: true };
         mesh.add(hitbox);
-        
-        // Ajout du label 3D (Sprite)
-        if (label) {
-            const sprite = this._createLabelSprite(label);
-            // La flèche est couchée sur le sol (rotation X = -90). 
-            // Son axe Z local pointe vers le haut. On positionne le texte un peu au-dessus.
-            sprite.position.set(0, -80, 20);
-            mesh.add(sprite);
-        }
 
         const pos = new THREE.Vector3(positionObj.x, positionObj.y, positionObj.z);
         if (pos.length() > 400) pos.setLength(400);
@@ -311,7 +300,7 @@ export class NodeNavigator {
     }
 
     /** Construit un marqueur avec icône SVG debout (rotation 0, format d'origine) */
-    _buildIconMesh(rotationArray, positionObj, targetNode, iconUrl, label = '') {
+    _buildIconMesh(rotationArray, positionObj, targetNode, iconUrl) {
         const W = 256, H = 256;
         const canvas = document.createElement('canvas');
         canvas.width  = W;
@@ -361,14 +350,6 @@ export class NodeNavigator {
         const hitbox = new THREE.Mesh(hitGeo, hitMat);
         hitbox.userData = { targetNode, isArrow: true };
         mesh.add(hitbox);
-        
-        // Ajout du label 3D (Sprite)
-        if (label) {
-            const sprite = this._createLabelSprite(label);
-            // L'icône est debout (rotation 0, 0, 0). Son axe Y pointe vers le haut.
-            sprite.position.set(0, -90, 0);
-            mesh.add(sprite);
-        }
 
         const pos = new THREE.Vector3(positionObj.x, positionObj.y, positionObj.z);
         if (pos.length() > 400) pos.setLength(400);
@@ -376,34 +357,5 @@ export class NodeNavigator {
         mesh.userData = { targetNode, isArrow: true, originalPoiPos: positionObj };
 
         return mesh;
-    }
-    
-    _createLabelSprite(label) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 512;
-        canvas.height = 128;
-        const ctx = canvas.getContext('2d');
-        
-        ctx.font = 'bold 50px "Cinzel", "Times New Roman", serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        
-        // Contour noir épais
-        ctx.lineWidth = 8;
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
-        ctx.strokeText(label, 256, 64);
-        
-        // Texte doré
-        ctx.fillStyle = '#e7ba80';
-        ctx.fillText(label, 256, 64);
-        
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.colorSpace = THREE.SRGBColorSpace;
-        
-        const mat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false });
-        const sprite = new THREE.Sprite(mat);
-        // Ratio 4:1
-        sprite.scale.set(160, 40, 1);
-        return sprite;
     }
 }
