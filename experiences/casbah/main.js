@@ -449,6 +449,15 @@ class CasbahExperience {
                 }
             });
         }
+
+        const btnAudioDebug = document.getElementById('btn-hud-audiodebug');
+        if (btnAudioDebug) {
+            bindButton(btnAudioDebug, () => {
+                if (this.sceneAudioDirector) {
+                    this.sceneAudioDirector.toggleDebug();
+                }
+            });
+        }
         
         if (this.els.btnStop) {
             bindButton(this.els.btnStop, () => this._stopVoice());
