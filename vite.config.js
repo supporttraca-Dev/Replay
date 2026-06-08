@@ -181,6 +181,7 @@ export default defineConfig(({ command }) => {
                     safeEntry('synagogue', path.resolve(process.cwd(), 'experiences/synagogue/index.html')),
                     safeEntry('tombeau',   path.resolve(process.cwd(), 'experiences/tombeau/index.html')),
                     safeEntry('editor',    path.resolve(process.cwd(), 'editor/index.html')),
+                    safeEntry('parallax',  path.resolve(process.cwd(), 'experiences/parallax-test/index.html'))
                 )
             }
         },
