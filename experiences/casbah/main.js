@@ -14,7 +14,8 @@ import {
     TimeTravelModule,
     CompassModule,
     NodeNavigator,
-    EditorModule
+    EditorModule,
+    TutorialModule
 } from './modules/index.js';
 
 import { SceneEngine } from '../../src/js/engine/SceneEngine.js';
@@ -212,6 +213,14 @@ class CasbahExperience {
     _initModules() {
         this.sceneAudioDirector = new SceneAudioDirector(tracaAudio, CASBAH_SCENARIO.nodes);
 
+        // 0. Tutorial (doit être instancié avant les autres modules)
+        this.tutorial = new TutorialModule({
+            btnGyro:      document.getElementById('btn-hud-gyro'),
+            btnEagle:     document.getElementById('btn-hud-eagle'),
+            btnInventory: document.getElementById('btn-open-inventory'),
+            onActivateGyro: () => this._toggleGyro()
+        });
+
         // 1. Inventory & Codex
         this.inventory = new InventoryModule(
             ARTIFACTS_DB,
@@ -220,6 +229,13 @@ class CasbahExperience {
             this.state.foundArtifacts,
             () => this._updateQuestUI()
         );
+
+        // Hook tutorial → inventaire ouvert
+        const _origOpenModal = this.inventory.openModal.bind(this.inventory);
+        this.inventory.openModal = () => {
+            _origOpenModal();
+            this.tutorial.onInventoryOpened();
+        };
 
         window.addEventListener('traca_use_item', (e) => {
             if (e.detail === 'journal') {
@@ -241,7 +257,11 @@ class CasbahExperience {
             inventory: this.inventory,
             onStopVoice: () => this._stopVoice(),
             onUpdatePois: () => this._updatePoiVisibility(),
-            onArtifactFound: (artId) => this._onArtifactFound(artId),
+            onArtifactFound: (artId) => {
+                this._onArtifactFound(artId);
+                const artData = ARTIFACTS_DB[this.state.currentNodeId];
+                this.tutorial.onArtifactFound(artData?.name || 'Objet');
+            },
             showToast: (txt) => this.inventory.showToast(txt),
             state: this.state
         });
@@ -287,6 +307,9 @@ class CasbahExperience {
 
                 // ── Ambience par scène ─────────────────────────────────────
                 this.sceneAudioDirector.onNodeEnter(this.state.currentNodeId, this.state.isNight);
+
+                // ── Tutorial step 2 : Vision d'Aigle ──────────────────────
+                this.tutorial?.onNodeChanged();
 
                 if (this.state.mode === 'EDIT' && this.editor) {
                     this.editor.renderEditorList();
@@ -746,8 +769,11 @@ class CasbahExperience {
                 // ─── Lancer le tutoriel onboarding (une seule fois) ───
                 if (!this.state.onboarding.firstInteractDetected) {
                     this.state.onboarding.firstInteractDetected = true;
-                    this._startGyroOnboardingTimer();
+                    this.tutorial?.onExperienceStart();
                 }
+
+                // ─── Tutorial step 1 : flèches de navigation ─────────────
+                this.tutorial?.onArrowsShown();
             }, 500);
 
         } else if (mode === 'EDIT') {
@@ -853,6 +879,7 @@ class CasbahExperience {
                     }
                     tracaAudio.playSFX('ui/enter.mp3');
                     if (tracaAudio.channels?.sfx) tracaAudio.channels.sfx.volume = 1.0;
+                    this.tutorial?.onArrowUsed();
                     this.navigator.loadNode(targetNode);
                     return;
                 }

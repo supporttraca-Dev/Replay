@@ -8,3 +8,4 @@ export { TimeTravelModule }  from './TimeTravelModule.js';
 export { CompassModule }     from './CompassModule.js';
 export { NodeNavigator }     from './NodeNavigator.js';
 export { EditorModule }      from './EditorModule.js';
+export { TutorialModule }    from './TutorialModule.js';
